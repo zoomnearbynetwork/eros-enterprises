@@ -7,10 +7,7 @@ import {
   LEAD_SOURCES,
   LEAD_STATUSES,
 } from "@/features/crm/constants";
-import {
-  getLeadFilterOptions,
-  getLeadsForDashboard,
-} from "@/features/leads/repository";
+import leadRepository from "@/features/leads/repository";
 import { numberFormatter } from "@/features/crm/utils";
 
 export const dynamic = "force-dynamic";
@@ -33,8 +30,8 @@ export default async function DashboardLeadsPage(
   };
 
   const [leads, filterOptions] = await Promise.all([
-    getLeadsForDashboard(filters),
-    getLeadFilterOptions(),
+    leadRepository.getLeadsForDashboard(filters),
+    leadRepository.getLeadFilterOptions(),
   ]);
   const newLeadsCount = leads.filter((lead) => lead.status === "NEW").length;
   const hotLeadsCount = leads.filter(

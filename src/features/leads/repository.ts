@@ -234,3 +234,12 @@ export async function getLeadDetail(leadId: string): Promise<LeadDetailRecord | 
     },
   });
 }
+
+const leadRepository = {
+  createLead,
+  getLeadsForDashboard,
+  getLeadFilterOptions,
+  getLeadDetail,
+};
+
+export default leadRepository;
