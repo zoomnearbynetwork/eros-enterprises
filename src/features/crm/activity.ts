@@ -18,6 +18,9 @@ type CreateActivityInput = {
   quotationId?: string | null;
   invoiceId?: string | null;
   paymentId?: string | null;
+  whatsappConversationId?: string | null;
+  whatsappMessageId?: string | null;
+  automationRuleId?: string | null;
   metadata?: Prisma.InputJsonValue;
 };
 
@@ -40,6 +43,9 @@ export async function createActivityLog(
       quotationId: input.quotationId,
       invoiceId: input.invoiceId,
       paymentId: input.paymentId,
+      whatsappConversationId: input.whatsappConversationId,
+      whatsappMessageId: input.whatsappMessageId,
+      automationRuleId: input.automationRuleId,
       metadata: input.metadata,
     },
   });

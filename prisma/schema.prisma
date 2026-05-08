@@ -47,6 +47,9 @@ enum ActivityEntityType {
   QUOTATION
   INVOICE
   PAYMENT
+  WHATSAPP_CONVERSATION
+  WHATSAPP_MESSAGE
+  AUTOMATION_RULE
 }
 
 enum CustomerStatus {
@@ -87,6 +90,10 @@ enum ActivityType {
   INVOICE_UPDATED
   INVOICE_STATUS_CHANGED
   PAYMENT_RECORDED
+  WHATSAPP_MESSAGE_RECEIVED
+  WHATSAPP_MESSAGE_SENT
+  AUTOMATION_RULE_CREATED
+  AUTOMATION_RULE_UPDATED
 }
 
 enum QuotationStatus {
@@ -116,6 +123,46 @@ enum PaymentMethod {
   OTHER
 }
 
+enum WhatsAppConversationStatus {
+  OPEN
+  ARCHIVED
+}
+
+enum WhatsAppMessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum WhatsAppMessageStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  RECEIVED
+}
+
+enum WhatsAppProvider {
+  MOCK
+  META_CLOUD
+  BAILEYS
+}
+
+enum AutomationTriggerType {
+  LEAD_CREATED
+  SITE_VISIT_SCHEDULED
+  QUOTATION_SENT
+  INVOICE_SENT
+  PAYMENT_DUE
+  AMC_RENEWAL_DUE
+}
+
+enum AutomationActionType {
+  SEND_WHATSAPP_MESSAGE
+  CREATE_TASK
+  INTERNAL_NOTIFICATION
+}
+
 model User {
   id                 String        @id @default(cuid())
   email              String        @unique
@@ -128,6 +175,7 @@ model User {
   role               Role          @relation(fields: [roleId], references: [id], onDelete: Restrict)
   assignedLeads      Lead[]        @relation("LeadAssignee")
   assignedSiteVisits SiteVisit[]   @relation("SiteVisitEngineer")
+  whatsappMessagesSent WhatsAppMessage[]
   activities         ActivityLog[]
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
@@ -169,6 +217,8 @@ model Lead {
   quotations      Quotation[]
   invoices        Invoice[]
   payments        Payment[]
+  whatsappConversations WhatsAppConversation[]
+  whatsappMessages WhatsAppMessage[]
   activities      ActivityLog[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -197,6 +247,8 @@ model Customer {
   quotations         Quotation[]
   invoices           Invoice[]
   payments           Payment[]
+  whatsappConversations WhatsAppConversation[]
+  whatsappMessages   WhatsAppMessage[]
   activities         ActivityLog[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
@@ -375,6 +427,82 @@ model Payment {
   @@index([paidAt])
 }
 
+model WhatsAppConversation {
+  id                 String                     @id @default(cuid())
+  phone              String                     @unique
+  displayName        String?
+  status             WhatsAppConversationStatus @default(OPEN)
+  provider           WhatsAppProvider           @default(MOCK)
+  providerThreadKey  String?
+  lastMessageAt      DateTime?
+  lastDirection      WhatsAppMessageDirection?
+  lastMessagePreview String?
+  leadId             String?
+  lead               Lead?                      @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  customerId         String?
+  customer           Customer?                  @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  messages           WhatsAppMessage[]
+  activities         ActivityLog[]
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+
+  @@index([leadId])
+  @@index([customerId])
+  @@index([status, lastMessageAt])
+}
+
+model WhatsAppMessage {
+  id                 String                   @id @default(cuid())
+  conversationId     String
+  conversation       WhatsAppConversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  direction          WhatsAppMessageDirection
+  status             WhatsAppMessageStatus    @default(QUEUED)
+  provider           WhatsAppProvider         @default(MOCK)
+  externalMessageId  String?
+  body               String
+  errorMessage       String?
+  metadata           Json?
+  leadId             String?
+  lead               Lead?                    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  customerId         String?
+  customer           Customer?                @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  sentByUserId       String?
+  sentByUser         User?                    @relation(fields: [sentByUserId], references: [id], onDelete: SetNull)
+  deliveredAt        DateTime?
+  readAt             DateTime?
+  failedAt           DateTime?
+  activities         ActivityLog[]
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  @@index([conversationId, createdAt])
+  @@index([leadId])
+  @@index([customerId])
+  @@index([sentByUserId])
+  @@index([status, direction])
+}
+
+model AutomationRule {
+  id                  String                @id @default(cuid())
+  name                String
+  description         String?
+  triggerType         AutomationTriggerType
+  actionType          AutomationActionType
+  isActive            Boolean               @default(true)
+  delayMinutes        Int                   @default(0)
+  messageTemplate     String?
+  taskTitle           String?
+  taskDescription     String?
+  notificationTitle   String?
+  notificationMessage String?
+  activities          ActivityLog[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+
+  @@index([triggerType, isActive])
+  @@index([actionType, isActive])
+}
+
 model ActivityLog {
   id             String             @id @default(cuid())
   type           ActivityType
@@ -399,6 +527,12 @@ model ActivityLog {
   invoice        Invoice?           @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   paymentId      String?
   payment        Payment?           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  whatsappConversationId String?
+  whatsappConversation WhatsAppConversation? @relation(fields: [whatsappConversationId], references: [id], onDelete: Cascade)
+  whatsappMessageId String?
+  whatsappMessage WhatsAppMessage?  @relation(fields: [whatsappMessageId], references: [id], onDelete: Cascade)
+  automationRuleId String?
+  automationRule AutomationRule?    @relation(fields: [automationRuleId], references: [id], onDelete: Cascade)
   occurredAt     DateTime           @default(now())
   createdAt      DateTime           @default(now())
 
@@ -411,4 +545,7 @@ model ActivityLog {
   @@index([quotationId])
   @@index([invoiceId])
   @@index([paymentId])
+  @@index([whatsappConversationId])
+  @@index([whatsappMessageId])
+  @@index([automationRuleId])
 }

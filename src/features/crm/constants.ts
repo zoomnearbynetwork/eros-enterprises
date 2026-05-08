@@ -84,6 +84,10 @@ export const ACTIVITY_TYPES = [
   "INVOICE_UPDATED",
   "INVOICE_STATUS_CHANGED",
   "PAYMENT_RECORDED",
+  "WHATSAPP_MESSAGE_RECEIVED",
+  "WHATSAPP_MESSAGE_SENT",
+  "AUTOMATION_RULE_CREATED",
+  "AUTOMATION_RULE_UPDATED",
 ] as const;
 
 export const LEAD_SOURCE_LABELS: Record<(typeof LEAD_SOURCES)[number], string> = {
@@ -189,4 +193,8 @@ export const ACTIVITY_TYPE_LABELS: Record<(typeof ACTIVITY_TYPES)[number], strin
   INVOICE_UPDATED: "Invoice Updated",
   INVOICE_STATUS_CHANGED: "Invoice Status Updated",
   PAYMENT_RECORDED: "Payment Recorded",
+  WHATSAPP_MESSAGE_RECEIVED: "WhatsApp Message Received",
+  WHATSAPP_MESSAGE_SENT: "WhatsApp Message Sent",
+  AUTOMATION_RULE_CREATED: "Automation Rule Created",
+  AUTOMATION_RULE_UPDATED: "Automation Rule Updated",
 };

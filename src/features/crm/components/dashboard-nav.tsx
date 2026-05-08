@@ -8,6 +8,8 @@ const items = [
   { href: "/dashboard/quotations", label: "Quotations" },
   { href: "/dashboard/invoices", label: "Invoices" },
   { href: "/dashboard/payments", label: "Payments" },
+  { href: "/dashboard/whatsapp", label: "WhatsApp" },
+  { href: "/dashboard/automation", label: "Automation" },
 ];
 
 export function DashboardNav() {

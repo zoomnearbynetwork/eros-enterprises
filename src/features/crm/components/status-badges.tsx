@@ -1,4 +1,6 @@
 import type {
+  AutomationActionType,
+  AutomationTriggerType,
   CustomerStatus,
   CustomerType,
   InvoiceStatus,
@@ -7,6 +9,7 @@ import type {
   PaymentMethod,
   QuotationStatus,
   SiteVisitStatus,
+  WhatsAppMessageStatus,
 } from "@prisma/client";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +23,11 @@ import {
   QUOTATION_STATUS_LABELS,
   SITE_VISIT_STATUS_LABELS,
 } from "@/features/crm/constants";
+import {
+  AUTOMATION_ACTION_LABELS,
+  AUTOMATION_TRIGGER_LABELS,
+} from "@/features/automation/constants";
+import { WHATSAPP_MESSAGE_STATUS_LABELS } from "@/features/whatsapp/constants";
 
 export function LeadStatusBadge({ status }: { status: LeadStatus }) {
   const className =
@@ -106,4 +114,26 @@ export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
 
 export function PaymentMethodBadge({ method }: { method: PaymentMethod }) {
   return <Badge className="bg-white/8 text-zinc-200">{PAYMENT_METHOD_LABELS[method]}</Badge>;
+}
+
+export function WhatsAppMessageStatusBadge({ status }: { status: WhatsAppMessageStatus }) {
+  const className =
+    {
+      QUEUED: "bg-zinc-500/15 text-zinc-200",
+      SENT: "bg-sky-500/15 text-sky-200",
+      DELIVERED: "bg-indigo-500/15 text-indigo-200",
+      READ: "bg-emerald-500/15 text-emerald-200",
+      FAILED: "bg-rose-500/15 text-rose-200",
+      RECEIVED: "bg-amber-500/15 text-amber-200",
+    }[status] ?? "bg-white/10 text-zinc-200";
+
+  return <Badge className={className}>{WHATSAPP_MESSAGE_STATUS_LABELS[status]}</Badge>;
+}
+
+export function AutomationTriggerBadge({ trigger }: { trigger: AutomationTriggerType }) {
+  return <Badge className="bg-sky-500/15 text-sky-200">{AUTOMATION_TRIGGER_LABELS[trigger]}</Badge>;
+}
+
+export function AutomationActionBadge({ action }: { action: AutomationActionType }) {
+  return <Badge className="bg-fuchsia-500/15 text-fuchsia-200">{AUTOMATION_ACTION_LABELS[action]}</Badge>;
 }
