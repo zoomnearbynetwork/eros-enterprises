@@ -1,9 +1,12 @@
 import type {
   ActivityType,
+  InvoiceStatus,
   Lead,
   LeadPriority,
   LeadSource,
   LeadStatus,
+  Prisma,
+  QuotationStatus,
   SiteVisitStatus,
 } from "@prisma/client";
 
@@ -91,6 +94,21 @@ export type LeadDetailRecord = Lead & {
       firstName: string;
       lastName: string | null;
     } | null;
+  }>;
+  quotations: Array<{
+    id: string;
+    quotationNumber: string;
+    status: QuotationStatus;
+    totalAmount: Prisma.Decimal;
+    issueDate: Date;
+  }>;
+  invoices: Array<{
+    id: string;
+    invoiceNumber: string;
+    status: InvoiceStatus;
+    totalAmount: Prisma.Decimal;
+    balanceAmount: Prisma.Decimal;
+    issueDate: Date;
   }>;
   activities: LeadActivityItem[];
 };

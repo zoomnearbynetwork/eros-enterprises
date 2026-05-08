@@ -84,6 +84,37 @@ export async function getCustomerDetail(customerId: string) {
           serviceInterest: true,
         },
       },
+      quotations: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          quotationNumber: true,
+          status: true,
+          totalAmount: true,
+          issueDate: true,
+        },
+      },
+      invoices: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          invoiceNumber: true,
+          status: true,
+          totalAmount: true,
+          balanceAmount: true,
+          issueDate: true,
+        },
+      },
+      payments: {
+        orderBy: [{ paidAt: "desc" }],
+        select: {
+          id: true,
+          paymentNumber: true,
+          amount: true,
+          paidAt: true,
+          method: true,
+        },
+      },
       activities: {
         orderBy: { occurredAt: "desc" },
         select: {

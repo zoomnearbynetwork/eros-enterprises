@@ -1,4 +1,9 @@
 export const numberFormatter = new Intl.NumberFormat("en-IN");
+export const currencyFormatter = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 2,
+});
 
 export const shortDateFormatter = new Intl.DateTimeFormat("en-IN", {
   dateStyle: "medium",
@@ -46,4 +51,8 @@ export function formatDateTimeLocalInput(date: Date) {
 export function getInitials(name: string) {
   const parts = name.trim().split(/\s+/).slice(0, 2);
   return parts.map((part) => part[0]?.toUpperCase() ?? "").join("");
+}
+
+export function formatCurrency(amount: number) {
+  return currencyFormatter.format(amount);
 }

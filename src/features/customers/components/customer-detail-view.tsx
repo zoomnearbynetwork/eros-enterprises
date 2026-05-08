@@ -6,8 +6,11 @@ import { CustomerNotePanel } from "@/features/crm/components/mutation-controls";
 import {
   CustomerStatusBadge,
   CustomerTypeBadge,
+  InvoiceStatusBadge,
+  PaymentMethodBadge,
+  QuotationStatusBadge,
 } from "@/features/crm/components/status-badges";
-import { dateTimeFormatter } from "@/features/crm/utils";
+import { dateTimeFormatter, formatCurrency } from "@/features/crm/utils";
 import type { getCustomerDetail } from "@/features/customers/repository";
 
 type CustomerDetail = NonNullable<Awaited<ReturnType<typeof getCustomerDetail>>>;
@@ -86,12 +89,65 @@ export function CustomerDetailView({ customer }: { customer: CustomerDetail }) {
 
           <Card className="border border-white/10 bg-[#101113]/92 py-0 shadow-none">
             <CardHeader className="border-b border-white/10 py-6">
-              <CardTitle className="text-white">Future Modules</CardTitle>
+              <CardTitle className="text-white">Commercial Records</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-4 p-6 md:grid-cols-3">
-              <PlaceholderCard title="Quotations" description="Quotation workflow will plug in here in a future phase." />
-              <PlaceholderCard title="Invoices" description="Invoice generation and tracking will be added later." />
-              <PlaceholderCard title="Projects" description="Execution handoff and project tracking stay reserved here." />
+            <CardContent className="grid gap-6 p-6 md:grid-cols-3">
+              <div className="space-y-4">
+                <div className="text-sm font-medium text-white">Quotations</div>
+                {customer.quotations.length > 0 ? customer.quotations.map((quotation) => (
+                  <Link
+                    key={quotation.id}
+                    href={`/dashboard/quotations/${quotation.id}`}
+                    className="block rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4 transition hover:border-white/15"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs uppercase tracking-[0.18em] text-amber-200/90">{quotation.quotationNumber}</div>
+                      <QuotationStatusBadge status={quotation.status} />
+                    </div>
+                    <div className="mt-3 text-sm text-white">{formatCurrency(Number(quotation.totalAmount))}</div>
+                  </Link>
+                )) : (
+                  <PlaceholderCard title="Quotations" description="No quotations have been linked to this customer yet." />
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <div className="text-sm font-medium text-white">Invoices</div>
+                {customer.invoices.length > 0 ? customer.invoices.map((invoice) => (
+                  <Link
+                    key={invoice.id}
+                    href={`/dashboard/invoices/${invoice.id}`}
+                    className="block rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4 transition hover:border-white/15"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs uppercase tracking-[0.18em] text-amber-200/90">{invoice.invoiceNumber}</div>
+                      <InvoiceStatusBadge status={invoice.status} />
+                    </div>
+                    <div className="mt-3 text-sm text-white">{formatCurrency(Number(invoice.totalAmount))}</div>
+                    <div className="mt-1 text-xs text-zinc-500">Balance {formatCurrency(Number(invoice.balanceAmount))}</div>
+                  </Link>
+                )) : (
+                  <PlaceholderCard title="Invoices" description="No invoices have been issued for this customer yet." />
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <div className="text-sm font-medium text-white">Payments</div>
+                {customer.payments.length > 0 ? customer.payments.map((payment) => (
+                  <div
+                    key={payment.id}
+                    className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs uppercase tracking-[0.18em] text-amber-200/90">{payment.paymentNumber}</div>
+                      <PaymentMethodBadge method={payment.method} />
+                    </div>
+                    <div className="mt-3 text-sm text-white">{formatCurrency(Number(payment.amount))}</div>
+                  </div>
+                )) : (
+                  <PlaceholderCard title="Payments" description="Payments will start showing here once invoices are collected." />
+                )}
+              </div>
             </CardContent>
           </Card>
 

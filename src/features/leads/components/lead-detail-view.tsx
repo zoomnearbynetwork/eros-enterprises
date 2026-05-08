@@ -4,12 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ActivityTimeline } from "@/features/crm/components/activity-timeline";
 import { LeadMutationPanel } from "@/features/crm/components/mutation-controls";
 import {
+  InvoiceStatusBadge,
   LeadPriorityBadge,
   LeadStatusBadge,
+  QuotationStatusBadge,
 } from "@/features/crm/components/status-badges";
 import { LEAD_SOURCE_LABELS } from "@/features/leads/constants";
 import type { LeadDetailRecord } from "@/features/leads/types";
-import { dateTimeFormatter, formatPersonName } from "@/features/crm/utils";
+import { dateTimeFormatter, formatCurrency, formatPersonName } from "@/features/crm/utils";
 
 type AssignableUser = {
   id: string;
@@ -127,6 +129,62 @@ export function LeadDetailView({
                   No site visits scheduled yet for this lead.
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          <Card className="border border-white/10 bg-[#101113]/92 py-0 shadow-none">
+            <CardHeader className="border-b border-white/10 py-6">
+              <CardTitle className="text-white">Commercial Flow</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6 p-6 md:grid-cols-2">
+              <div className="space-y-4">
+                <div className="text-sm font-medium text-white">Quotations</div>
+                {lead.quotations.length > 0 ? lead.quotations.map((quotation) => (
+                  <Link
+                    key={quotation.id}
+                    href={`/dashboard/quotations/${quotation.id}`}
+                    className="block rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4 transition hover:border-white/15"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs uppercase tracking-[0.18em] text-amber-200/90">
+                        {quotation.quotationNumber}
+                      </div>
+                      <QuotationStatusBadge status={quotation.status} />
+                    </div>
+                    <div className="mt-3 text-sm text-white">{formatCurrency(Number(quotation.totalAmount))}</div>
+                  </Link>
+                )) : (
+                  <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm text-zinc-500">
+                    No quotations have been created for this lead yet.
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <div className="text-sm font-medium text-white">Invoices</div>
+                {lead.invoices.length > 0 ? lead.invoices.map((invoice) => (
+                  <Link
+                    key={invoice.id}
+                    href={`/dashboard/invoices/${invoice.id}`}
+                    className="block rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4 transition hover:border-white/15"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs uppercase tracking-[0.18em] text-amber-200/90">
+                        {invoice.invoiceNumber}
+                      </div>
+                      <InvoiceStatusBadge status={invoice.status} />
+                    </div>
+                    <div className="mt-3 text-sm text-white">{formatCurrency(Number(invoice.totalAmount))}</div>
+                    <div className="mt-1 text-xs text-zinc-500">
+                      Balance {formatCurrency(Number(invoice.balanceAmount))}
+                    </div>
+                  </Link>
+                )) : (
+                  <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm text-zinc-500">
+                    No invoices have been generated for this lead yet.
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 

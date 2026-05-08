@@ -3,19 +3,24 @@ import type { LeadStatus } from "@prisma/client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LeadPriorityBadge, LeadStatusBadge, SiteVisitStatusBadge } from "@/features/crm/components/status-badges";
+import { getBillingDashboardMetrics } from "@/features/billing/repository";
 import { getDashboardOverview } from "@/features/crm/repository";
 import {
   LEAD_STATUS_LABELS,
 } from "@/features/crm/constants";
 import {
   dateTimeFormatter,
+  formatCurrency,
   numberFormatter,
 } from "@/features/crm/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const overview = await getDashboardOverview();
+  const [overview, billingMetrics] = await Promise.all([
+    getDashboardOverview(),
+    getBillingDashboardMetrics(),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -38,6 +43,10 @@ export default async function DashboardPage() {
         <MetricCard label="Won Leads" value={numberFormatter.format(overview.metrics.wonLeads)} />
         <MetricCard label="Lost Leads" value={numberFormatter.format(overview.metrics.lostLeads)} />
         <MetricCard label="Total Customers" value={numberFormatter.format(overview.metrics.totalCustomers)} />
+        <MetricCard label="Quoted Value" value={formatCurrency(billingMetrics.quotedValue)} />
+        <MetricCard label="Invoiced Value" value={formatCurrency(billingMetrics.invoicedValue)} />
+        <MetricCard label="Collected Amount" value={formatCurrency(billingMetrics.collectedAmount)} />
+        <MetricCard label="Pending Amount" value={formatCurrency(billingMetrics.pendingAmount)} />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">

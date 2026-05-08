@@ -5,6 +5,9 @@ const items = [
   { href: "/dashboard/leads", label: "Leads" },
   { href: "/dashboard/customers", label: "Customers" },
   { href: "/dashboard/site-visits", label: "Site Visits" },
+  { href: "/dashboard/quotations", label: "Quotations" },
+  { href: "/dashboard/invoices", label: "Invoices" },
+  { href: "/dashboard/payments", label: "Payments" },
 ];
 
 export function DashboardNav() {

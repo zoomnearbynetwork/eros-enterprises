@@ -39,6 +39,39 @@ async function createUniqueNumber(prefix: string) {
         return candidate;
       }
     }
+
+    if (prefix === "ERQ") {
+      const existing = await prisma.quotation.findUnique({
+        where: { quotationNumber: candidate },
+        select: { id: true },
+      });
+
+      if (!existing) {
+        return candidate;
+      }
+    }
+
+    if (prefix === "ERI") {
+      const existing = await prisma.invoice.findUnique({
+        where: { invoiceNumber: candidate },
+        select: { id: true },
+      });
+
+      if (!existing) {
+        return candidate;
+      }
+    }
+
+    if (prefix === "ERP") {
+      const existing = await prisma.payment.findUnique({
+        where: { paymentNumber: candidate },
+        select: { id: true },
+      });
+
+      if (!existing) {
+        return candidate;
+      }
+    }
   }
 
   throw new Error(`Could not generate a unique ${prefix} number.`);
@@ -54,4 +87,16 @@ export function createCustomerNumber() {
 
 export function createSiteVisitNumber() {
   return createUniqueNumber("ERV");
+}
+
+export function createQuotationNumber() {
+  return createUniqueNumber("ERQ");
+}
+
+export function createInvoiceNumber() {
+  return createUniqueNumber("ERI");
+}
+
+export function createPaymentNumber() {
+  return createUniqueNumber("ERP");
 }

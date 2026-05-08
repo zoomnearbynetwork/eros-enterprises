@@ -15,6 +15,9 @@ type CreateActivityInput = {
   customerId?: string | null;
   siteVisitId?: string | null;
   serviceId?: string | null;
+  quotationId?: string | null;
+  invoiceId?: string | null;
+  paymentId?: string | null;
   metadata?: Prisma.InputJsonValue;
 };
 
@@ -34,6 +37,9 @@ export async function createActivityLog(
       customerId: input.customerId,
       siteVisitId: input.siteVisitId,
       serviceId: input.serviceId,
+      quotationId: input.quotationId,
+      invoiceId: input.invoiceId,
+      paymentId: input.paymentId,
       metadata: input.metadata,
     },
   });

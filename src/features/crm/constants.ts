@@ -39,6 +39,33 @@ export const SITE_VISIT_STATUSES = [
   "CANCELLED",
 ] as const;
 
+export const QUOTATION_STATUSES = [
+  "DRAFT",
+  "SENT",
+  "VIEWED",
+  "ACCEPTED",
+  "REJECTED",
+  "EXPIRED",
+] as const;
+
+export const INVOICE_STATUSES = [
+  "DRAFT",
+  "SENT",
+  "PARTIALLY_PAID",
+  "PAID",
+  "OVERDUE",
+  "CANCELLED",
+] as const;
+
+export const PAYMENT_METHODS = [
+  "CASH",
+  "UPI",
+  "BANK_TRANSFER",
+  "CHEQUE",
+  "CARD",
+  "OTHER",
+] as const;
+
 export const ACTIVITY_TYPES = [
   "LEAD_CREATED",
   "LEAD_STATUS_CHANGED",
@@ -49,6 +76,14 @@ export const ACTIVITY_TYPES = [
   "SITE_VISIT_UPDATED",
   "CUSTOMER_CREATED",
   "NOTE_ADDED",
+  "QUOTATION_CREATED",
+  "QUOTATION_UPDATED",
+  "QUOTATION_STATUS_CHANGED",
+  "QUOTATION_CONVERTED_TO_INVOICE",
+  "INVOICE_CREATED",
+  "INVOICE_UPDATED",
+  "INVOICE_STATUS_CHANGED",
+  "PAYMENT_RECORDED",
 ] as const;
 
 export const LEAD_SOURCE_LABELS: Record<(typeof LEAD_SOURCES)[number], string> = {
@@ -100,6 +135,42 @@ export const SITE_VISIT_STATUS_LABELS: Record<
   CANCELLED: "Cancelled",
 };
 
+export const QUOTATION_STATUS_LABELS: Record<
+  (typeof QUOTATION_STATUSES)[number],
+  string
+> = {
+  DRAFT: "Draft",
+  SENT: "Sent",
+  VIEWED: "Viewed",
+  ACCEPTED: "Accepted",
+  REJECTED: "Rejected",
+  EXPIRED: "Expired",
+};
+
+export const INVOICE_STATUS_LABELS: Record<
+  (typeof INVOICE_STATUSES)[number],
+  string
+> = {
+  DRAFT: "Draft",
+  SENT: "Sent",
+  PARTIALLY_PAID: "Partially Paid",
+  PAID: "Paid",
+  OVERDUE: "Overdue",
+  CANCELLED: "Cancelled",
+};
+
+export const PAYMENT_METHOD_LABELS: Record<
+  (typeof PAYMENT_METHODS)[number],
+  string
+> = {
+  CASH: "Cash",
+  UPI: "UPI",
+  BANK_TRANSFER: "Bank Transfer",
+  CHEQUE: "Cheque",
+  CARD: "Card",
+  OTHER: "Other",
+};
+
 export const ACTIVITY_TYPE_LABELS: Record<(typeof ACTIVITY_TYPES)[number], string> = {
   LEAD_CREATED: "Lead Created",
   LEAD_STATUS_CHANGED: "Status Updated",
@@ -110,4 +181,12 @@ export const ACTIVITY_TYPE_LABELS: Record<(typeof ACTIVITY_TYPES)[number], strin
   SITE_VISIT_UPDATED: "Site Visit Updated",
   CUSTOMER_CREATED: "Customer Created",
   NOTE_ADDED: "Note Added",
+  QUOTATION_CREATED: "Quotation Created",
+  QUOTATION_UPDATED: "Quotation Updated",
+  QUOTATION_STATUS_CHANGED: "Quotation Status Updated",
+  QUOTATION_CONVERTED_TO_INVOICE: "Converted to Invoice",
+  INVOICE_CREATED: "Invoice Created",
+  INVOICE_UPDATED: "Invoice Updated",
+  INVOICE_STATUS_CHANGED: "Invoice Status Updated",
+  PAYMENT_RECORDED: "Payment Recorded",
 };

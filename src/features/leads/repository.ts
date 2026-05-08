@@ -215,6 +215,27 @@ export async function getLeadDetail(leadId: string): Promise<LeadDetailRecord | 
           },
         },
       },
+      quotations: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          quotationNumber: true,
+          status: true,
+          totalAmount: true,
+          issueDate: true,
+        },
+      },
+      invoices: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          invoiceNumber: true,
+          status: true,
+          totalAmount: true,
+          balanceAmount: true,
+          issueDate: true,
+        },
+      },
       activities: {
         orderBy: { occurredAt: "desc" },
         select: {

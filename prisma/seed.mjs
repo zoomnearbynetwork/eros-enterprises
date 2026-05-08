@@ -68,6 +68,13 @@ const users = [
     phone: "+91 98765 40003",
     roleName: "OPERATIONS_MANAGER",
   },
+  {
+    email: "accounts@erosenterprises.in",
+    firstName: "Meera",
+    lastName: "Desai",
+    phone: "+91 98765 40004",
+    roleName: "ACCOUNTS_EXECUTIVE",
+  },
 ];
 
 async function main() {

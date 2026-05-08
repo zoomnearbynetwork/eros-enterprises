@@ -44,6 +44,9 @@ enum ActivityEntityType {
   CUSTOMER
   SITE_VISIT
   SERVICE
+  QUOTATION
+  INVOICE
+  PAYMENT
 }
 
 enum CustomerStatus {
@@ -76,6 +79,41 @@ enum ActivityType {
   SITE_VISIT_UPDATED
   CUSTOMER_CREATED
   NOTE_ADDED
+  QUOTATION_CREATED
+  QUOTATION_UPDATED
+  QUOTATION_STATUS_CHANGED
+  QUOTATION_CONVERTED_TO_INVOICE
+  INVOICE_CREATED
+  INVOICE_UPDATED
+  INVOICE_STATUS_CHANGED
+  PAYMENT_RECORDED
+}
+
+enum QuotationStatus {
+  DRAFT
+  SENT
+  VIEWED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  BANK_TRANSFER
+  CHEQUE
+  CARD
+  OTHER
 }
 
 model User {
@@ -128,6 +166,9 @@ model Lead {
   assignedTo      User?         @relation("LeadAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   customer        Customer?
   siteVisits      SiteVisit[]
+  quotations      Quotation[]
+  invoices        Invoice[]
+  payments        Payment[]
   activities      ActivityLog[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -153,6 +194,9 @@ model Customer {
   leadId             String?        @unique
   lead               Lead?          @relation(fields: [leadId], references: [id], onDelete: SetNull)
   siteVisits         SiteVisit[]
+  quotations         Quotation[]
+  invoices           Invoice[]
+  payments           Payment[]
   activities         ActivityLog[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
@@ -188,9 +232,147 @@ model Service {
   name        String        @unique
   description String?
   isActive    Boolean       @default(true)
+  quotationItems QuotationItem[]
+  invoiceItems InvoiceItem[]
   activities  ActivityLog[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model Quotation {
+  id             String          @id @default(cuid())
+  quotationNumber String         @unique
+  leadId         String?
+  lead           Lead?           @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  customerId     String?
+  customer       Customer?       @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  status         QuotationStatus @default(DRAFT)
+  title          String?
+  issueDate      DateTime        @default(now())
+  validUntil     DateTime?
+  notes          String?
+  subtotalAmount Decimal         @default(0) @db.Decimal(12, 2)
+  taxAmount      Decimal         @default(0) @db.Decimal(12, 2)
+  discountAmount Decimal         @default(0) @db.Decimal(12, 2)
+  totalAmount    Decimal         @default(0) @db.Decimal(12, 2)
+  sentAt         DateTime?
+  viewedAt       DateTime?
+  acceptedAt     DateTime?
+  rejectedAt     DateTime?
+  expiredAt      DateTime?
+  invoice        Invoice?
+  items          QuotationItem[]
+  activities     ActivityLog[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([leadId])
+  @@index([customerId])
+  @@index([status, issueDate])
+}
+
+model QuotationItem {
+  id             String    @id @default(cuid())
+  quotationId    String
+  quotation      Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  serviceId      String?
+  service        Service?  @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  name           String
+  description    String?
+  quantity       Decimal   @default(1) @db.Decimal(12, 2)
+  unitPrice      Decimal   @default(0) @db.Decimal(12, 2)
+  taxRate        Decimal   @default(0) @db.Decimal(5, 2)
+  lineSubtotal   Decimal   @default(0) @db.Decimal(12, 2)
+  lineTaxAmount  Decimal   @default(0) @db.Decimal(12, 2)
+  lineTotal      Decimal   @default(0) @db.Decimal(12, 2)
+  sortOrder      Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([quotationId, sortOrder])
+  @@index([serviceId])
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  invoiceNumber  String        @unique
+  quotationId    String?       @unique
+  quotation      Quotation?    @relation(fields: [quotationId], references: [id], onDelete: SetNull)
+  leadId         String?
+  lead           Lead?         @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  customerId     String?
+  customer       Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  status         InvoiceStatus @default(DRAFT)
+  title          String?
+  issueDate      DateTime      @default(now())
+  dueDate        DateTime?
+  notes          String?
+  subtotalAmount Decimal       @default(0) @db.Decimal(12, 2)
+  taxAmount      Decimal       @default(0) @db.Decimal(12, 2)
+  discountAmount Decimal       @default(0) @db.Decimal(12, 2)
+  totalAmount    Decimal       @default(0) @db.Decimal(12, 2)
+  paidAmount     Decimal       @default(0) @db.Decimal(12, 2)
+  balanceAmount  Decimal       @default(0) @db.Decimal(12, 2)
+  sentAt         DateTime?
+  paidAt         DateTime?
+  overdueAt      DateTime?
+  cancelledAt    DateTime?
+  items          InvoiceItem[]
+  payments       Payment[]
+  activities     ActivityLog[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([quotationId])
+  @@index([leadId])
+  @@index([customerId])
+  @@index([status, dueDate])
+}
+
+model InvoiceItem {
+  id             String   @id @default(cuid())
+  invoiceId      String
+  invoice        Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  serviceId      String?
+  service        Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  name           String
+  description    String?
+  quantity       Decimal  @default(1) @db.Decimal(12, 2)
+  unitPrice      Decimal  @default(0) @db.Decimal(12, 2)
+  taxRate        Decimal  @default(0) @db.Decimal(5, 2)
+  lineSubtotal   Decimal  @default(0) @db.Decimal(12, 2)
+  lineTaxAmount  Decimal  @default(0) @db.Decimal(12, 2)
+  lineTotal      Decimal  @default(0) @db.Decimal(12, 2)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([invoiceId, sortOrder])
+  @@index([serviceId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  paymentNumber String        @unique
+  invoiceId     String
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  leadId        String?
+  lead          Lead?         @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  customerId    String?
+  customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  amount        Decimal       @default(0) @db.Decimal(12, 2)
+  method        PaymentMethod
+  paidAt        DateTime      @default(now())
+  reference     String?
+  notes         String?
+  activities    ActivityLog[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([invoiceId])
+  @@index([leadId])
+  @@index([customerId])
+  @@index([paidAt])
 }
 
 model ActivityLog {
@@ -211,6 +393,12 @@ model ActivityLog {
   siteVisit      SiteVisit?         @relation(fields: [siteVisitId], references: [id], onDelete: Cascade)
   serviceId      String?
   service        Service?           @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  quotationId    String?
+  quotation      Quotation?         @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  invoiceId      String?
+  invoice        Invoice?           @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  paymentId      String?
+  payment        Payment?           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
   occurredAt     DateTime           @default(now())
   createdAt      DateTime           @default(now())
 
@@ -220,4 +408,7 @@ model ActivityLog {
   @@index([customerId])
   @@index([siteVisitId])
   @@index([serviceId])
+  @@index([quotationId])
+  @@index([invoiceId])
+  @@index([paymentId])
 }
