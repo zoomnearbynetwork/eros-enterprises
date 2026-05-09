@@ -12,8 +12,8 @@ import { Section } from "@/components/website/section";
 import { SectionHeader } from "@/components/website/section-header";
 import { ServiceCard } from "@/components/website/service-card";
 import { WebsiteIcon } from "@/components/website/icon-map";
-import { LeadCaptureForm } from "@/components/website/lead-capture-form";
 import { servicesBySlug } from "@/content/website";
+import { LeadCaptureForm } from "@/features/leads/components/lead-capture-form";
 import type { ServiceDefinition, ServiceSlug } from "@/content/website";
 
 export function ServiceTemplatePage({ service }: { service: ServiceDefinition }) {

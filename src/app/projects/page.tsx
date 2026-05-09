@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { PageHero } from "@/components/website/page-hero";
 import { ProjectCard } from "@/components/website/project-card";
@@ -7,12 +8,29 @@ import { Section } from "@/components/website/section";
 import { SectionHeader } from "@/components/website/section-header";
 import { featuredProjects, pageMetadata } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import { buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.projects);
 
 export default function ProjectsPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Projects", path: "/projects" },
+          ]),
+          buildItemListSchema(
+            "Selected electrical and lighting projects",
+            featuredProjects.map((project) => ({
+              name: project.title,
+              path: "/projects",
+              description: project.description,
+            })),
+          ),
+        ]}
+      />
       <PageHero
         eyebrow="Projects"
         title="Selected work that reflects premium execution and site control."

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { PageHero } from "@/components/website/page-hero";
 import { Section } from "@/components/website/section";
@@ -8,12 +9,27 @@ import { StatBlock } from "@/components/website/stat-block";
 import { TestimonialCard } from "@/components/website/testimonial-card";
 import { pageMetadata, reviewStats, testimonialHighlights } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import {
+  buildBreadcrumbSchema,
+  buildLocalBusinessSchema,
+  buildReviewSchema,
+} from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.reviews);
 
 export default function ReviewsPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Reviews", path: "/reviews" },
+          ]),
+          buildLocalBusinessSchema(testimonialHighlights),
+          ...buildReviewSchema(testimonialHighlights),
+        ]}
+      />
       <PageHero
         eyebrow="Reviews"
         title="Client confidence built on execution quality and responsiveness."

@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eros Enterprises
 
-## Getting Started
+## Local PostgreSQL Setup (Windows)
 
-First, run the development server:
+This app is designed to use a normal PostgreSQL server on `localhost:5432`. The application database must be `eros_enterprises` and Prisma migrations use a dedicated shadow database named `eros_enterprises_shadow`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Install PostgreSQL for Windows and make sure the Database Server is running.
+
+2. Create the databases with `psql`:
+
+```powershell
+psql -U postgres -h localhost -p 5432 -d postgres -c "CREATE DATABASE eros_enterprises;"
+psql -U postgres -h localhost -p 5432 -d postgres -c "CREATE DATABASE eros_enterprises_shadow;"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If the databases already exist, PostgreSQL will report that and you can continue.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Copy `.env.example` to `.env` and set your local PostgreSQL password:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/eros_enterprises?schema=public"
+SHADOW_DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/eros_enterprises_shadow?schema=public"
+```
 
-## Learn More
+4. Generate the Prisma client:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+npx prisma generate
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Apply the local migration:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```powershell
+npx prisma migrate dev --name phase4_crm_core
+```
 
-## Deploy on Vercel
+6. Seed demo roles, services, and users:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```powershell
+npx prisma db seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+7. Start the app:
+
+```powershell
+npm run dev
+```
+
+8. Run the verification build:
+
+```powershell
+npm run verify
+```
+
+## Production
+
+Production deployment notes, PM2 config, Nginx guidance, PostgreSQL setup, and backup/checklist instructions live in `docs/production-deployment.md`.

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { PageHero } from "@/components/website/page-hero";
 import { Section } from "@/components/website/section";
@@ -7,12 +8,19 @@ import { SectionHeader } from "@/components/website/section-header";
 import { StatBlock } from "@/components/website/stat-block";
 import { heroMetrics, pageMetadata, whyChooseEros } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import { buildBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.about);
 
 export default function AboutPage() {
   return (
     <>
+      <StructuredData
+        data={buildBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ])}
+      />
       <PageHero
         eyebrow="About"
         title="An electrical company shaped by technical discipline and visual sensibility."

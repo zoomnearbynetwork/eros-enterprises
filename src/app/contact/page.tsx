@@ -1,19 +1,35 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { FaqAccordion } from "@/components/website/faq-accordion";
-import { LeadCaptureForm } from "@/components/website/lead-capture-form";
 import { PageHero } from "@/components/website/page-hero";
 import { Section } from "@/components/website/section";
 import { SectionHeader } from "@/components/website/section-header";
 import { contactFaq, pageMetadata } from "@/content/website";
 import { siteConfig } from "@/config/site";
+import { LeadCaptureForm } from "@/features/leads/components/lead-capture-form";
 import { buildMetadata } from "@/lib/metadata";
+import {
+  buildBreadcrumbSchema,
+  buildFaqSchema,
+  buildLocalBusinessSchema,
+} from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.contact);
 
 export default function ContactPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+          buildLocalBusinessSchema(),
+          buildFaqSchema(contactFaq),
+        ]}
+      />
       <PageHero
         eyebrow="Contact"
         title="Start the conversation with a quote request, site visit, or direct enquiry."

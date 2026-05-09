@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { PageHero } from "@/components/website/page-hero";
 import { Section } from "@/components/website/section";
 import { SectionHeader } from "@/components/website/section-header";
 import { blogPosts, pageMetadata } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import { buildBlogCollectionSchema, buildBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.blog);
 
 export default function BlogPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+          ]),
+          buildBlogCollectionSchema(blogPosts),
+        ]}
+      />
       <PageHero
         eyebrow="Blog"
         title="Practical insights on lighting, electrical planning, and long-term performance."
@@ -27,6 +38,7 @@ export default function BlogPage() {
           {blogPosts.map((post) => (
             <article
               key={post.title}
+              id={post.href.split("#")[1]}
               className="rounded-[2rem] border border-white/10 bg-white/4 p-7"
             >
               <div className="text-[11px] font-semibold tracking-[0.24em] text-amber-200 uppercase">

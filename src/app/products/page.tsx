@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { PageHero } from "@/components/website/page-hero";
 import { Section } from "@/components/website/section";
@@ -7,12 +8,29 @@ import { SectionHeader } from "@/components/website/section-header";
 import { StatBlock } from "@/components/website/stat-block";
 import { productCategories, pageMetadata, projectStats } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import { buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.products);
 
 export default function ProductsPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Products", path: "/products" },
+          ]),
+          buildItemListSchema(
+            "Lighting and electrical product categories",
+            productCategories.map((category) => ({
+              name: category.title,
+              path: "/products",
+              description: category.description,
+            })),
+          ),
+        ]}
+      />
       <PageHero
         eyebrow="Products"
         title="Product categories selected to support refined, reliable execution."

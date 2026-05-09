@@ -6,6 +6,7 @@ import { createLead } from "@/features/leads/repository";
 import { leadCaptureServerSchema, type LeadCaptureInput } from "@/features/leads/schemas";
 import type { LeadCaptureActionResponse } from "@/features/leads/types";
 import { actionFailure, actionSuccess } from "@/lib/action-response";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function createLeadAction(
   input: LeadCaptureInput,
@@ -20,6 +21,15 @@ export async function createLeadAction(
   }
 
   try {
+    const rateLimit = await checkRateLimit({
+      key: `${validated.data.phone}:${validated.data.sourcePage}`,
+      namespace: "lead-capture",
+    });
+
+    if (!rateLimit.allowed) {
+      return actionFailure(rateLimit.reason ?? "Too many requests. Please try again later.");
+    }
+
     const lead = await createLead(validated.data);
 
     revalidatePath("/dashboard/leads");

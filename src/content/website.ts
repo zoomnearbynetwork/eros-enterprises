@@ -153,18 +153,21 @@ export const testimonialHighlights = [
   {
     name: "Rohan Mehta",
     role: "Director, Meridian Workspace",
+    rating: 5,
     quote:
       "Eros brought engineering discipline and premium execution together. The site ran smoothly, and the finished environment feels far more refined than a standard electrical contract.",
   },
   {
     name: "Anika Shah",
     role: "Homeowner",
+    rating: 5,
     quote:
       "Their lighting recommendations changed the entire character of our home. The installation was neat, thoughtful, and genuinely high-end.",
   },
   {
     name: "Karan Desai",
     role: "Facilities Lead, Nova Retail",
+    rating: 5,
     quote:
       "Fast response, clear communication, and a team that understood both uptime and aesthetics. That combination is rare.",
   },
@@ -234,19 +237,19 @@ export const blogPosts = [
     title: "How premium lighting changes the perceived value of a space",
     excerpt:
       "A practical look at layering, warmth, control, and finish quality in high-end environments.",
-    href: "/blog",
+    href: "/blog#premium-lighting-value",
   },
   {
     title: "Electrical planning mistakes that increase retrofit costs",
     excerpt:
       "Common coordination gaps that create avoidable expense during residential and commercial execution.",
-    href: "/blog",
+    href: "/blog#electrical-planning-mistakes",
   },
   {
     title: "What to include in an electrical AMC for business continuity",
     excerpt:
       "The operating checks, escalation rules, and preventive routines that matter most in ongoing support contracts.",
-    href: "/blog",
+    href: "/blog#electrical-amc-business-continuity",
   },
 ];
 

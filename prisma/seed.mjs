@@ -46,23 +46,81 @@ const services = [
   },
 ];
 
+const users = [
+  {
+    email: "admin@erosenterprises.in",
+    firstName: "Aarav",
+    lastName: "Menon",
+    phone: "+91 98765 40001",
+    roleName: "SUPER_ADMIN",
+  },
+  {
+    email: "sales@erosenterprises.in",
+    firstName: "Diya",
+    lastName: "Shah",
+    phone: "+91 98765 40002",
+    roleName: "SALES_MANAGER",
+  },
+  {
+    email: "ops@erosenterprises.in",
+    firstName: "Rohan",
+    lastName: "Kapoor",
+    phone: "+91 98765 40003",
+    roleName: "OPERATIONS_MANAGER",
+  },
+  {
+    email: "accounts@erosenterprises.in",
+    firstName: "Meera",
+    lastName: "Desai",
+    phone: "+91 98765 40004",
+    roleName: "ACCOUNTS_EXECUTIVE",
+  },
+];
+
 async function main() {
-  await prisma.$transaction([
-    ...roles.map((role) =>
-      prisma.role.upsert({
-        where: { name: role.name },
-        update: role,
-        create: role,
-      }),
-    ),
-    ...services.map((service) =>
-      prisma.service.upsert({
-        where: { code: service.code },
-        update: service,
-        create: service,
-      }),
-    ),
-  ]);
+  for (const role of roles) {
+    await prisma.role.upsert({
+      where: { name: role.name },
+      update: role,
+      create: role,
+    });
+  }
+
+  for (const service of services) {
+    await prisma.service.upsert({
+      where: { code: service.code },
+      update: service,
+      create: service,
+    });
+  }
+
+  for (const user of users) {
+    const role = await prisma.role.findUnique({
+      where: { name: user.roleName },
+      select: { id: true },
+    });
+
+    if (!role) {
+      throw new Error(`Role ${user.roleName} is required before seeding users.`);
+    }
+
+    await prisma.user.upsert({
+      where: { email: user.email },
+      update: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        roleId: role.id,
+      },
+      create: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        roleId: role.id,
+      },
+    });
+  }
 }
 
 main()

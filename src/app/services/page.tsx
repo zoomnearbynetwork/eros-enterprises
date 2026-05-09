@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { StructuredData } from "@/components/seo/structured-data";
 import { CtaBanner } from "@/components/website/cta-banner";
 import { FadeIn } from "@/components/website/motion";
 import { PageHero } from "@/components/website/page-hero";
@@ -8,12 +9,29 @@ import { SectionHeader } from "@/components/website/section-header";
 import { ServiceCard } from "@/components/website/service-card";
 import { services, pageMetadata } from "@/content/website";
 import { buildMetadata } from "@/lib/metadata";
+import { buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildMetadata(pageMetadata.services);
 
 export default function ServicesPage() {
   return (
     <>
+      <StructuredData
+        data={[
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+          ]),
+          buildItemListSchema(
+            "Electrical and lighting services",
+            services.map((service) => ({
+              name: service.name,
+              path: service.href,
+              description: service.summary,
+            })),
+          ),
+        ]}
+      />
       <PageHero
         eyebrow="Services"
         title="Full-spectrum electrical and lighting services for premium spaces."

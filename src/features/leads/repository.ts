@@ -1,29 +1,62 @@
-import { ActivityEntityType, LeadPriority, LeadSource, LeadStatus } from "@prisma/client";
+import "server-only";
 
+import {
+  ActivityEntityType,
+  ActivityType,
+  LeadPriority,
+  LeadSource,
+  LeadStatus,
+  Prisma,
+} from "@prisma/client";
+
+import { createActivityLog } from "@/features/crm/activity";
+import { createLeadNumber } from "@/features/crm/numbering";
 import { prisma } from "@/lib/prisma";
 import type { LeadCreateInput } from "@/features/leads/schemas";
-import type { LeadDetailRecord, LeadListItem } from "@/features/leads/types";
-import { createLeadNumberSeed, isUniqueConstraintError } from "@/features/leads/utils";
+import type {
+  LeadDetailRecord,
+  LeadFilters,
+  LeadListItem,
+} from "@/features/leads/types";
+import { isUniqueConstraintError } from "@/features/leads/utils";
 
-async function createUniqueLeadNumber() {
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    const candidate = createLeadNumberSeed();
-    const existingLead = await prisma.lead.findUnique({
-      where: { leadNumber: candidate },
-      select: { id: true },
-    });
+function buildLeadWhere(filters: LeadFilters): Prisma.LeadWhereInput {
+  const where: Prisma.LeadWhereInput = {};
 
-    if (!existingLead) {
-      return candidate;
-    }
+  if (filters.query) {
+    where.OR = [
+      { leadNumber: { contains: filters.query, mode: "insensitive" } },
+      { name: { contains: filters.query, mode: "insensitive" } },
+      { phone: { contains: filters.query, mode: "insensitive" } },
+    ];
   }
 
-  throw new Error("Could not generate a unique lead number.");
+  if (filters.status) {
+    where.status = filters.status as LeadStatus;
+  }
+
+  if (filters.service) {
+    where.serviceInterest = { contains: filters.service, mode: "insensitive" };
+  }
+
+  if (filters.source) {
+    where.source = filters.source as LeadSource;
+  }
+
+  if (filters.priority) {
+    where.priority = filters.priority as LeadPriority;
+  }
+
+  if (filters.assignee) {
+    where.assignedToId = filters.assignee;
+  }
+
+  return where;
 }
 
 export async function createLead(input: LeadCreateInput) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const leadNumber = await createUniqueLeadNumber();
+    const leadNumber = await createLeadNumber();
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -49,20 +82,18 @@ export async function createLead(input: LeadCreateInput) {
           },
         });
 
-        await tx.activityLog.create({
-          data: {
-            action: "LEAD_CREATED",
-            description: `Lead ${lead.leadNumber} created from ${lead.sourcePage}.`,
-            entityType: ActivityEntityType.LEAD,
-            entityId: lead.id,
-            leadId: lead.id,
-            metadata: {
-              serviceInterest: lead.serviceInterest,
-              source: lead.source,
-              sourcePage: lead.sourcePage,
-              ctaLocation: lead.ctaLocation,
-              budgetRange: lead.budgetRange,
-            },
+        await createActivityLog(tx, {
+          type: ActivityType.LEAD_CREATED,
+          entityType: ActivityEntityType.LEAD,
+          entityId: lead.id,
+          leadId: lead.id,
+          description: `Lead ${lead.leadNumber} created from ${lead.sourcePage}.`,
+          metadata: {
+            serviceInterest: lead.serviceInterest,
+            source: lead.source,
+            sourcePage: lead.sourcePage,
+            ctaLocation: lead.ctaLocation,
+            budgetRange: lead.budgetRange,
           },
         });
 
@@ -80,8 +111,11 @@ export async function createLead(input: LeadCreateInput) {
   throw new Error("Could not create lead after multiple attempts.");
 }
 
-export async function getLeadsForDashboard(): Promise<LeadListItem[]> {
+export async function getLeadsForDashboard(
+  filters: LeadFilters = {},
+): Promise<LeadListItem[]> {
   return prisma.lead.findMany({
+    where: buildLeadWhere(filters),
     orderBy: [{ createdAt: "desc" }],
     select: {
       id: true,
@@ -98,8 +132,48 @@ export async function getLeadsForDashboard(): Promise<LeadListItem[]> {
       status: true,
       priority: true,
       createdAt: true,
+      assignedTo: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
+}
+
+export async function getLeadFilterOptions() {
+  const [services, users] = await Promise.all([
+    prisma.lead.findMany({
+      distinct: ["serviceInterest"],
+      orderBy: { serviceInterest: "asc" },
+      select: { serviceInterest: true },
+    }),
+    prisma.user.findMany({
+      where: {
+        status: "ACTIVE",
+        role: {
+          name: {
+            in: ["SUPER_ADMIN", "SALES_MANAGER", "OPERATIONS_MANAGER"],
+          },
+        },
+      },
+      orderBy: [{ firstName: "asc" }],
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+      },
+    }),
+  ]);
+
+  return {
+    services: services
+      .map((item) => item.serviceInterest)
+      .filter((service, index, allServices) => allServices.indexOf(service) === index),
+    users,
+  };
 }
 
 export async function getLeadDetail(leadId: string): Promise<LeadDetailRecord | null> {
@@ -112,17 +186,83 @@ export async function getLeadDetail(leadId: string): Promise<LeadDetailRecord | 
           firstName: true,
           lastName: true,
           email: true,
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          customerNumber: true,
+          legalName: true,
+          status: true,
+        },
+      },
+      siteVisits: {
+        orderBy: [{ scheduledAt: "asc" }],
+        select: {
+          id: true,
+          visitNumber: true,
+          scheduledAt: true,
+          address: true,
+          status: true,
+          assignedEngineer: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+      quotations: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          quotationNumber: true,
+          status: true,
+          totalAmount: true,
+          issueDate: true,
+        },
+      },
+      invoices: {
+        orderBy: [{ createdAt: "desc" }],
+        select: {
+          id: true,
+          invoiceNumber: true,
+          status: true,
+          totalAmount: true,
+          balanceAmount: true,
+          issueDate: true,
         },
       },
       activities: {
         orderBy: { occurredAt: "desc" },
         select: {
           id: true,
+          type: true,
           action: true,
           description: true,
           occurredAt: true,
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
         },
       },
     },
   });
 }
+
+const leadRepository = {
+  createLead,
+  getLeadsForDashboard,
+  getLeadFilterOptions,
+  getLeadDetail,
+};
+
+export default leadRepository;

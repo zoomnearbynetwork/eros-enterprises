@@ -1,18 +1,9 @@
 import type { Prisma } from "@prisma/client";
 
-const leadNumberPrefix = "ERL";
+import { createLeadNumber } from "@/features/crm/numbering";
 
 export function createLeadNumberSeed() {
-  const now = new Date();
-  const date = [
-    now.getUTCFullYear(),
-    String(now.getUTCMonth() + 1).padStart(2, "0"),
-    String(now.getUTCDate()).padStart(2, "0"),
-  ].join("");
-
-  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
-
-  return `${leadNumberPrefix}-${date}-${random}`;
+  return createLeadNumber();
 }
 
 export function isUniqueConstraintError(
