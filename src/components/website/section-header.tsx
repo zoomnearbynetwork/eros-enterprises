@@ -5,33 +5,52 @@ export function SectionHeader({
   title,
   description,
   align = "left",
+  theme = "dark",
   className,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
+  theme?: "dark" | "light";
   className?: string;
 }) {
   return (
     <div
       className={cn(
-        "max-w-3xl space-y-4",
+        "max-w-4xl space-y-5",
         align === "center" && "mx-auto text-center",
         className
       )}
     >
       {eyebrow ? (
-        <span className="inline-flex rounded-full border border-amber-400/20 bg-amber-300/8 px-4 py-1 text-[11px] font-semibold tracking-[0.28em] text-amber-200 uppercase">
+        <span
+          className={cn(
+            "inline-flex rounded-full px-4 py-1.5 text-[11px] font-semibold tracking-[0.28em] uppercase shadow-[0_10px_30px_rgba(0,0,0,0.12)]",
+            theme === "dark"
+              ? "border border-[#f6b11a]/22 bg-[linear-gradient(135deg,rgba(246,177,26,0.16),rgba(0,152,255,0.1))] text-[#fff6d8]"
+              : "border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.12),rgba(0,152,255,0.08))] text-[#005bcf]"
+          )}
+        >
           {eyebrow}
         </span>
       ) : null}
-      <div className="space-y-3">
-        <h2 className="font-heading text-3xl leading-tight font-medium text-white sm:text-4xl lg:text-5xl">
+      <div className="space-y-4">
+        <h2
+          className={cn(
+            "font-heading text-4xl leading-[1.04] font-medium sm:text-5xl lg:text-6xl",
+            theme === "dark" ? "text-white" : "text-[#07111f]"
+          )}
+        >
           {title}
         </h2>
         {description ? (
-          <p className="text-base leading-7 text-zinc-300 sm:text-lg">
+          <p
+            className={cn(
+              "max-w-3xl text-base leading-8 sm:text-lg",
+              theme === "dark" ? "text-[#fff6d8]/72" : "text-slate-600"
+            )}
+          >
             {description}
           </p>
         ) : null}

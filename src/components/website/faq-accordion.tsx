@@ -8,15 +8,15 @@ export function FaqAccordion({
       {items.map((item) => (
         <details
           key={item.question}
-          className="group rounded-[1.75rem] border border-white/10 bg-white/4 px-6 py-5 text-zinc-100"
+          className="group rounded-[1.75rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04)_48%,rgba(2,6,23,0.38))] px-6 py-5 text-zinc-100 shadow-[0_18px_60px_rgba(0,0,0,0.16)]"
         >
           <summary className="cursor-pointer list-none pr-8 text-lg font-medium marker:hidden">
             <div className="flex items-start justify-between gap-4">
               <span>{item.question}</span>
-              <span className="text-amber-200 transition group-open:rotate-45">+</span>
+              <span className="text-[#f6b11a] transition group-open:rotate-45">+</span>
             </div>
           </summary>
-          <p className="pt-4 text-sm leading-7 text-zinc-300">{item.answer}</p>
+          <p className="pt-4 text-sm leading-7 text-[#fff6d8]/72">{item.answer}</p>
         </details>
       ))}
     </div>

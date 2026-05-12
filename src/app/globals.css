@@ -84,6 +84,14 @@
   --font-sans: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-heading: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --eros-navy: #020617;
+  --eros-rich-navy: #07111f;
+  --eros-electric: #0098ff;
+  --eros-logo-blue: #005bcf;
+  --eros-gold: #f6b11a;
+  --eros-orange: #ff8a00;
+  --eros-cream: #fff6d8;
+  --eros-paper: #fffaf0;
 }
 
 @layer base {
@@ -108,11 +116,28 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
     background: color-mix(in oklab, var(--primary) 50%, transparent);
     color: black;
+  }
+}
+
+@layer base {
+  body {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(0, 152, 255, 0.08), transparent 20%),
+      radial-gradient(circle at 80% 0%, rgba(246, 177, 26, 0.08), transparent 16%),
+      linear-gradient(180deg, #020617 0%, #07111f 38%, #020617 100%);
   }
 }

@@ -33,7 +33,7 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
             <Button
               asChild
               size="lg"
-              className="h-12 rounded-full bg-amber-300 px-6 font-semibold text-zinc-950 hover:bg-amber-200"
+              className="h-12 rounded-full bg-[linear-gradient(135deg,#ffcf5a,#f6b11a_45%,#ff8a00)] px-6 font-semibold text-[#07111f]"
             >
               <Link href="/contact">Request this service</Link>
             </Button>
@@ -41,31 +41,31 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
               asChild
               size="lg"
               variant="outline"
-              className="h-12 rounded-full border-white/10 bg-white/6 px-6 text-white hover:bg-white/10"
+              className="h-12 rounded-full border-[#0098ff]/30 bg-[#0098ff]/10 px-6 text-white hover:bg-[#0098ff]/18"
             >
               <Link href="/services">View all services</Link>
             </Button>
           </>
         }
         aside={
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-            <div className="flex size-14 items-center justify-center rounded-2xl bg-amber-300/10 text-amber-200">
+          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04)_46%,rgba(2,6,23,0.42))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
+            <div className="flex size-14 items-center justify-center rounded-2xl border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.18),rgba(0,152,255,0.12))] text-[#fff6d8]">
               <WebsiteIcon name={service.icon} className="size-7" />
             </div>
             <h2 className="mt-6 font-heading text-3xl font-medium text-white">
               {service.name}
             </h2>
-            <p className="mt-4 text-sm leading-7 text-zinc-300">
+            <p className="mt-4 text-sm leading-7 text-[#fff6d8]/72">
               {service.summary}
             </p>
             <div className="mt-6 space-y-3">
               {service.highlights.slice(0, 3).map((highlight) => (
                 <div
                   key={highlight}
-                  className="flex gap-3 rounded-2xl border border-white/10 bg-black/20 px-4 py-4"
+                  className="flex gap-3 rounded-2xl border border-white/10 bg-[#020617]/48 px-4 py-4"
                 >
-                  <WebsiteIcon name="badge" className="mt-0.5 size-4 text-amber-200" />
-                  <p className="text-sm leading-7 text-zinc-300">{highlight}</p>
+                  <WebsiteIcon name="badge" className="mt-0.5 size-4 text-[#f6b11a]" />
+                  <p className="text-sm leading-7 text-[#fff6d8]/72">{highlight}</p>
                 </div>
               ))}
             </div>
@@ -98,8 +98,8 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
           {service.highlights.map((highlight) => (
             <StaggerItem key={highlight}>
               <div className="flex h-full gap-4 rounded-[2rem] border border-white/10 bg-white/4 p-6">
-                <WebsiteIcon name="badge" className="mt-1 size-5 text-amber-200" />
-                <p className="text-sm leading-7 text-zinc-300">{highlight}</p>
+                <WebsiteIcon name="badge" className="mt-1 size-5 text-[#f6b11a]" />
+                <p className="text-sm leading-7 text-[#fff6d8]/72">{highlight}</p>
               </div>
             </StaggerItem>
           ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, type ReactNode } from "react";
+import { MessageCircle, PhoneCall } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BUDGET_RANGES } from "@/features/leads/constants";
 import { useLeadCaptureForm } from "@/features/leads/hooks/use-lead-capture-form";
 import { services } from "@/content/website";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 export type LeadFormVariant = "homepageEnquiry" | "contact" | "siteVisit" | "quote" | "serviceCta";
@@ -136,7 +138,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Your full name"
                 {...form.register("name")}
-                className="h-12 rounded-2xl border-white/10 bg-black/20 text-white placeholder:text-zinc-500"
+                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
               />
             }
           />
@@ -147,7 +149,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Phone number"
                 {...form.register("phone")}
-                className="h-12 rounded-2xl border-white/10 bg-black/20 text-white placeholder:text-zinc-500"
+                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
               />
             }
           />
@@ -162,7 +164,7 @@ function LeadCaptureFormContent({
                 type="email"
                 placeholder="name@company.com"
                 {...form.register("email")}
-                className="h-12 rounded-2xl border-white/10 bg-black/20 text-white placeholder:text-zinc-500"
+                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
               />
             }
           />
@@ -172,7 +174,7 @@ function LeadCaptureFormContent({
             input={
               <select
                 {...form.register("serviceInterest")}
-                className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none focus:border-amber-300/40"
+                className="h-12 w-full rounded-[1.15rem] border border-white/10 bg-[#020617]/55 px-4 text-sm text-white outline-none focus:border-[#f6b11a]/45"
               >
                 <option value="" className="bg-zinc-950">
                   Select a service
@@ -195,7 +197,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Project city or site location"
                 {...form.register("location")}
-                className="h-12 rounded-2xl border-white/10 bg-black/20 text-white placeholder:text-zinc-500"
+                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
               />
             }
           />
@@ -208,7 +210,7 @@ function LeadCaptureFormContent({
             input={
               <select
                 {...form.register("budgetRange")}
-                className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none focus:border-amber-300/40"
+                className="h-12 w-full rounded-[1.15rem] border border-white/10 bg-[#020617]/55 px-4 text-sm text-white outline-none focus:border-[#f6b11a]/45"
               >
                 <option value="" className="bg-zinc-950">
                   Select budget range
@@ -231,19 +233,38 @@ function LeadCaptureFormContent({
               rows={5}
               placeholder="Tell us about the project, scope, urgency, or support requirement."
               {...form.register("message")}
-              className="rounded-[1.5rem] border-white/10 bg-black/20 text-white placeholder:text-zinc-500"
+              className="rounded-[1.35rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
             />
           }
         />
 
+        <div className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <a
+              href={`https://wa.me/${siteConfig.whatsapp}`}
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#fff6d8] hover:text-white"
+            >
+              <MessageCircle className="size-4 text-[#f6b11a]" />
+              WhatsApp now
+            </a>
+            <a
+              href={`tel:${siteConfig.phone}`}
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#fff6d8] hover:text-white"
+            >
+              <PhoneCall className="size-4 text-[#0098ff]" />
+              Call {siteConfig.phone}
+            </a>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm leading-6 text-zinc-400">
+          <p className="text-sm leading-6 text-[#fff6d8]/56">
             Leads go directly into the CRM with source tracking and activity logging.
           </p>
           <Button
             type="submit"
             disabled={isPending}
-            className="h-12 rounded-full bg-amber-300 px-6 font-semibold text-zinc-950 hover:bg-amber-200"
+            className="h-12 rounded-full bg-[linear-gradient(135deg,#ffcf5a,#f6b11a_45%,#ff8a00)] px-6 font-semibold text-[#07111f] shadow-[0_12px_30px_rgba(246,177,26,0.28)]"
           >
             {isPending ? "Submitting..." : copy.submitLabel}
           </Button>
@@ -279,14 +300,17 @@ function LeadCaptureFormFrame({
   return (
     <Card
       className={cn(
-        "rounded-[2rem] border border-white/10 bg-white/5 py-0 text-zinc-100 shadow-none",
+        "rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04)_45%,rgba(2,6,23,0.42))] py-0 text-zinc-100 shadow-[0_28px_90px_rgba(0,0,0,0.24)]",
         className,
       )}
     >
       <CardContent className="p-6 sm:p-8">
-        <div className="mb-6 space-y-2">
-          <h3 className="font-heading text-2xl font-medium text-white">{copy.title}</h3>
-          <p className="text-sm leading-7 text-zinc-300">{copy.description}</p>
+        <div className="mb-6 space-y-3">
+          <div className="inline-flex rounded-full border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.14),rgba(0,152,255,0.1))] px-3 py-1 text-[11px] font-semibold tracking-[0.24em] text-[#fff6d8] uppercase">
+            Lead capture
+          </div>
+          <h3 className="font-heading text-3xl font-medium text-white">{copy.title}</h3>
+          <p className="text-sm leading-7 text-[#fff6d8]/72">{copy.description}</p>
         </div>
         {isLoading ? (
           <div className="grid gap-4">
@@ -320,7 +344,7 @@ function Field({
 }) {
   return (
     <label className="grid gap-2">
-      <span className="text-sm font-medium text-zinc-200">{label}</span>
+      <span className="text-sm font-medium text-[#fff6d8]">{label}</span>
       {input}
       {error ? <span className="text-xs text-rose-300">{error}</span> : null}
     </label>

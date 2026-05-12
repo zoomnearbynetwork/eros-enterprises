@@ -7,9 +7,9 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   ogImageAlt:
     "Eros Enterprises premium electrical, lighting, and automation services",
-  phone: "+91 98765 43210",
+  phone: "+91 99201 11774",
   email: "projects@erosenterprises.in",
-  whatsapp: "919876543210",
+  whatsapp: "919920111774",
   address: "Ahmedabad, Gujarat, India",
   locality: "Ahmedabad",
   region: "Gujarat",
