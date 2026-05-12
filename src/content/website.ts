@@ -60,7 +60,6 @@ export const primaryNav: NavItem[] = [
   { href: "/services", label: "Services" },
   { href: "/products", label: "Products" },
   { href: "/projects", label: "Projects" },
-  { href: "/about", label: "About" },
   { href: "/reviews", label: "Reviews" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
