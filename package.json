@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "verify": "npm run typecheck && npm run lint && npm run build",
-    "postinstall": "node scripts/run-prisma.mjs generate"
+    "postinstall": "prisma generate --schema=prisma/schema.prisma"
   },
   "prisma": {
     "seed": "node prisma/seed.mjs"
