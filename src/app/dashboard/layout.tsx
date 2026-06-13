@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
-import { unauthorized } from "next/navigation";
+import { NextResponse } from "next/server";
 
 import { DashboardNav } from "@/features/crm/components/dashboard-nav";
 
@@ -43,7 +43,12 @@ export default async function DashboardLayout({
   }
 
   if (!authorized) {
-    unauthorized();
+    return new NextResponse("Unauthorized", {
+      status: 401,
+      headers: {
+        "WWW-Authenticate": 'Basic realm="Eros Enterprises CRM"',
+      },
+    }) as unknown as never;
   }
 
   return (

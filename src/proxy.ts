@@ -36,7 +36,7 @@ export function proxy(request: NextRequest) {
   return new Response("Authentication required", {
     status: 401,
     headers: {
-      "WWW-Authenticate": 'Basic realm="Eros Enterprises Dashboard"',
+      "WWW-Authenticate": 'Basic realm="Eros Enterprises CRM"',
     },
   });
 }
