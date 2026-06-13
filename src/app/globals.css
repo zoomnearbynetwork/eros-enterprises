@@ -304,4 +304,6 @@
   .text-eros-blue { color: #1565C0; }
   .border-eros { border-color: rgba(255, 255, 255, 0.07); }
   .border-eros-gold { border-color: rgba(245, 166, 35, 0.2); }
+
+  .sb-item:hover .sb-collapsed-tooltip { opacity: 1 !important; }
 }

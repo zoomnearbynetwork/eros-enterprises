@@ -1,13 +1,14 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bell,
   Calendar,
+  ChevronsLeft,
   CreditCard,
   FileText,
   LayoutDashboard,
@@ -96,6 +97,36 @@ const NAV_ITEMS = [
   { label: "Billing", href: "/dashboard/quotations", Icon: Receipt, exact: false },
   { label: "More", href: "/dashboard/more", Icon: MoreHorizontal, exact: false },
 ] as const;
+
+const DESKTOP_NAV = [
+  {
+    label: "MAIN",
+    items: [
+      { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard, exact: true },
+      { label: "Leads", href: "/dashboard/leads", Icon: Users, exact: false },
+    ],
+  },
+  {
+    label: "BILLING",
+    items: [
+      { label: "Quotations", href: "/dashboard/quotations", Icon: FileText, exact: false },
+      { label: "Invoices", href: "/dashboard/invoices", Icon: Receipt, exact: false },
+      { label: "Payments", href: "/dashboard/payments", Icon: CreditCard, exact: false },
+    ],
+  },
+  {
+    label: "OPERATIONS",
+    items: [
+      { label: "Site Visits", href: "/dashboard/site-visits", Icon: Calendar, exact: false },
+    ],
+  },
+  {
+    label: "AUTOMATION",
+    items: [
+      { label: "WhatsApp", href: "/dashboard/whatsapp", Icon: MessageSquare, exact: false },
+    ],
+  },
+];
 
 function DashboardTopBar({
   title,
@@ -323,6 +354,319 @@ function QuickAddSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
   );
 }
 
+function DesktopSidebar({ onQuickAdd }: { onQuickAdd: () => void }) {
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("eros-sidebar-collapsed") === "true";
+  });
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  const toggle = () => {
+    if (sidebarRef.current) sidebarRef.current.style.overflow = "hidden";
+    const next = !collapsed;
+    setCollapsed(next);
+    localStorage.setItem("eros-sidebar-collapsed", String(next));
+  };
+
+  function isActive(href: string, exact: boolean) {
+    if (exact) return pathname === href;
+    return pathname.startsWith(href);
+  }
+
+  return (
+    <div
+      ref={sidebarRef}
+      style={{
+        width: collapsed ? "60px" : "220px",
+        transition: "width 0.22s cubic-bezier(0.4,0,0.2,1)",
+        overflow: "hidden",
+        flexShrink: 0,
+        position: "sticky",
+        top: 0,
+        height: "100vh",
+        background: "#0A1628",
+        borderRight: "1px solid rgba(255,255,255,0.07)",
+        display: "flex",
+        flexDirection: "column",
+        zIndex: 30,
+      }}
+      onTransitionEnd={() => {
+        if (collapsed && sidebarRef.current) {
+          sidebarRef.current.style.overflow = "visible";
+        }
+      }}
+    >
+      {/* Header: logo + toggle */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "14px 12px",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          flexShrink: 0,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0, flex: 1 }}>
+          {/* Logo mark — always visible */}
+          <div
+            style={{
+              width: "32px",
+              height: "32px",
+              background: "#F5A623",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "16px",
+              fontWeight: 800,
+              color: "#050A14",
+            }}
+          >
+            E
+          </div>
+          {/* Brand text — fades out when collapsed */}
+          <div
+            style={{
+              opacity: collapsed ? 0 : 1,
+              maxWidth: collapsed ? "0px" : "200px",
+              overflow: "hidden",
+              transition: "opacity 0.15s, max-width 0.22s cubic-bezier(0.4,0,0.2,1)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <div style={{ fontSize: "13px", fontWeight: 700, color: "#FFFFFF", lineHeight: 1.2 }}>
+              Eros Enterprises
+            </div>
+            <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>
+              Business Platform
+            </div>
+          </div>
+        </div>
+        {/* Toggle button */}
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          style={{
+            width: "26px",
+            height: "26px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "6px",
+            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgba(255,255,255,0.05)",
+            color: "rgba(255,255,255,0.5)",
+            flexShrink: 0,
+            cursor: "pointer",
+          }}
+        >
+          <ChevronsLeft
+            size={14}
+            style={{
+              transform: collapsed ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.22s cubic-bezier(0.4,0,0.2,1)",
+            }}
+          />
+        </button>
+      </div>
+
+      {/* Quick add button */}
+      <div
+        style={{
+          padding: "8px 0",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          flexShrink: 0,
+        }}
+      >
+        <button
+          type="button"
+          onClick={onQuickAdd}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: collapsed ? "40px" : "calc(100% - 20px)",
+            margin: collapsed ? "10px auto" : "10px 10px",
+            padding: collapsed ? "8px 0" : "8px 12px",
+            background: "#F5A623",
+            borderRadius: "8px",
+            border: "none",
+            color: "#050A14",
+            fontWeight: 600,
+            fontSize: "13px",
+            cursor: "pointer",
+            transition:
+              "width 0.22s cubic-bezier(0.4,0,0.2,1), margin 0.22s cubic-bezier(0.4,0,0.2,1), padding 0.22s cubic-bezier(0.4,0,0.2,1)",
+            gap: "6px",
+          }}
+        >
+          <Plus size={16} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+          <span
+            style={{
+              opacity: collapsed ? 0 : 1,
+              maxWidth: collapsed ? "0px" : "120px",
+              overflow: "hidden",
+              transition: "opacity 0.15s, max-width 0.22s cubic-bezier(0.4,0,0.2,1)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Quick add
+          </span>
+        </button>
+      </div>
+
+      {/* Nav sections */}
+      <div style={{ flex: 1, overflowY: "auto", paddingBottom: "8px" }}>
+        {DESKTOP_NAV.map((section) => (
+          <div key={section.label}>
+            {/* Section label */}
+            <div
+              style={{
+                opacity: collapsed ? 0 : 1,
+                maxHeight: collapsed ? "0px" : "32px",
+                overflow: "hidden",
+                padding: collapsed ? "0 12px" : "10px 12px 4px",
+                transition: "all 0.22s cubic-bezier(0.4,0,0.2,1)",
+                fontSize: "9px",
+                fontWeight: 700,
+                color: "rgba(255,255,255,0.3)",
+                letterSpacing: "0.08em",
+              }}
+            >
+              {section.label}
+            </div>
+            {/* Nav items */}
+            {section.items.map((item) => {
+              const active = isActive(item.href, item.exact);
+              return (
+                <div
+                  key={item.href}
+                  className="sb-item"
+                  style={{ position: "relative" }}
+                >
+                  <Link
+                    href={item.href}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: collapsed ? "9px 0" : "9px 12px",
+                      justifyContent: collapsed ? "center" : "flex-start",
+                      borderRadius: "8px",
+                      margin: "1px 6px",
+                      background: active ? "rgba(245,166,35,0.12)" : "transparent",
+                      color: active ? "#F5A623" : "rgba(255,255,255,0.55)",
+                      textDecoration: "none",
+                      transition:
+                        "background 0.15s, color 0.15s, padding 0.22s cubic-bezier(0.4,0,0.2,1)",
+                      fontSize: "13px",
+                      fontWeight: active ? 600 : 400,
+                    }}
+                  >
+                    <item.Icon size={17} style={{ flexShrink: 0 }} />
+                    <span
+                      style={{
+                        opacity: collapsed ? 0 : 1,
+                        maxWidth: collapsed ? "0px" : "160px",
+                        overflow: "hidden",
+                        transition:
+                          "opacity 0.15s, max-width 0.22s cubic-bezier(0.4,0,0.2,1)",
+                        whiteSpace: "nowrap",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                  {/* Tooltip — visible only when collapsed, on sb-item hover */}
+                  <div
+                    className="sb-collapsed-tooltip"
+                    style={{
+                      display: collapsed ? undefined : "none",
+                      position: "absolute",
+                      left: "calc(100% + 8px)",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "#1E2D45",
+                      color: "#fff",
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      padding: "5px 10px",
+                      borderRadius: "6px",
+                      whiteSpace: "nowrap",
+                      pointerEvents: "none",
+                      zIndex: 100,
+                      border: "1px solid rgba(255,255,255,0.07)",
+                      opacity: 0,
+                      transition: "opacity 0.1s",
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* User area */}
+      <div
+        style={{
+          padding: "12px",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: collapsed ? "center" : "flex-start",
+          gap: "8px",
+          flexShrink: 0,
+          transition: "justify-content 0.22s cubic-bezier(0.4,0,0.2,1)",
+        }}
+      >
+        <div
+          style={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            background: "#1565C0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: 700,
+            color: "#FFFFFF",
+            flexShrink: 0,
+          }}
+        >
+          AM
+        </div>
+        <div
+          style={{
+            opacity: collapsed ? 0 : 1,
+            maxWidth: collapsed ? "0px" : "160px",
+            overflow: "hidden",
+            transition: "opacity 0.15s, max-width 0.22s cubic-bezier(0.4,0,0.2,1)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#FFFFFF" }}>
+            Account Manager
+          </div>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)", marginTop: "1px" }}>
+            Admin
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function DashboardShell({
   children,
   title,
@@ -337,10 +681,30 @@ export function DashboardShell({
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen" style={{ background: "#050A14" }}>
-      <DashboardTopBar title={title} subtitle={subtitle} actions={actions} />
-      <main style={{ paddingTop: "52px", paddingBottom: "80px" }}>{children}</main>
-      <DashboardBottomNav onAddPress={() => setSheetOpen(true)} />
+    <div style={{ background: "#050A14", minHeight: "100vh", display: "flex" }}>
+      {/* Desktop sidebar — hidden on mobile */}
+      <div className="hidden lg:block" style={{ flexShrink: 0 }}>
+        <DesktopSidebar onQuickAdd={() => setSheetOpen(true)} />
+      </div>
+
+      {/* Content column */}
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+        {/* Mobile-only top bar */}
+        <div className="lg:hidden">
+          <DashboardTopBar title={title} subtitle={subtitle} actions={actions} />
+        </div>
+
+        {/* Main content — offset for mobile fixed bars, no offset on desktop */}
+        <main className="flex-1 pt-[52px] pb-[80px] lg:pt-0 lg:pb-0">
+          {children}
+        </main>
+
+        {/* Mobile-only bottom nav */}
+        <div className="lg:hidden">
+          <DashboardBottomNav onAddPress={() => setSheetOpen(true)} />
+        </div>
+      </div>
+
       <QuickAddSheet isOpen={sheetOpen} onClose={() => setSheetOpen(false)} />
     </div>
   );

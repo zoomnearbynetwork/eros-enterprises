@@ -180,7 +180,7 @@ export default async function DashboardPage() {
             </div>
             <Link
               href="/dashboard/leads"
-              style={{ fontSize: "11px", color: "#F5A623" }}
+              style={{ fontSize: "11px", color: "#F5A623", whiteSpace: "nowrap", flexShrink: 0 }}
             >
               See all
             </Link>
@@ -210,16 +210,28 @@ export default async function DashboardPage() {
                     >
                       {initials}
                     </div>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1" style={{ overflow: "hidden" }}>
                       <div
-                        className="truncate font-medium"
-                        style={{ fontSize: "13px", color: "#FFFFFF" }}
+                        className="font-medium"
+                        style={{
+                          fontSize: "13px",
+                          color: "#FFFFFF",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
                       >
                         {lead.name}
                       </div>
                       <div
-                        className="truncate"
-                        style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "1px" }}
+                        style={{
+                          fontSize: "11px",
+                          color: "rgba(255,255,255,0.4)",
+                          marginTop: "1px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
                       >
                         {lead.serviceInterest} · {timeAgo(new Date(lead.createdAt))}
                       </div>
