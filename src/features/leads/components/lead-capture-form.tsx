@@ -138,7 +138,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Your full name"
                 {...form.register("name")}
-                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
+                className="h-12 rounded-[1.15rem] border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)]"
               />
             }
           />
@@ -149,7 +149,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Phone number"
                 {...form.register("phone")}
-                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
+                className="h-12 rounded-[1.15rem] border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)]"
               />
             }
           />
@@ -164,7 +164,7 @@ function LeadCaptureFormContent({
                 type="email"
                 placeholder="name@company.com"
                 {...form.register("email")}
-                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
+                className="h-12 rounded-[1.15rem] border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)]"
               />
             }
           />
@@ -174,13 +174,13 @@ function LeadCaptureFormContent({
             input={
               <select
                 {...form.register("serviceInterest")}
-                className="h-12 w-full rounded-[1.15rem] border border-white/10 bg-[#020617]/55 px-4 text-sm text-white outline-none focus:border-[#f6b11a]/45"
+                className="h-12 w-full rounded-[1.15rem] border border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] px-4 text-sm text-[color:var(--foreground)] outline-none focus:border-[#F4A300]"
               >
-                <option value="" className="bg-zinc-950">
+                <option value="" className="bg-[#06111F]">
                   Select a service
                 </option>
                 {services.map((service) => (
-                  <option key={service.slug} value={service.name} className="bg-zinc-950">
+                  <option key={service.slug} value={service.name} className="bg-[#06111F]">
                     {service.name}
                   </option>
                 ))}
@@ -197,7 +197,7 @@ function LeadCaptureFormContent({
               <Input
                 placeholder="Project city or site location"
                 {...form.register("location")}
-                className="h-12 rounded-[1.15rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
+                className="h-12 rounded-[1.15rem] border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)]"
               />
             }
           />
@@ -210,13 +210,13 @@ function LeadCaptureFormContent({
             input={
               <select
                 {...form.register("budgetRange")}
-                className="h-12 w-full rounded-[1.15rem] border border-white/10 bg-[#020617]/55 px-4 text-sm text-white outline-none focus:border-[#f6b11a]/45"
+                className="h-12 w-full rounded-[1.15rem] border border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] px-4 text-sm text-[color:var(--foreground)] outline-none focus:border-[#F4A300]"
               >
-                <option value="" className="bg-zinc-950">
+                <option value="" className="bg-[#06111F]">
                   Select budget range
                 </option>
                 {BUDGET_RANGES.map((budgetRange) => (
-                  <option key={budgetRange} value={budgetRange} className="bg-zinc-950">
+                  <option key={budgetRange} value={budgetRange} className="bg-[#06111F]">
                     {budgetRange}
                   </option>
                 ))}
@@ -233,38 +233,38 @@ function LeadCaptureFormContent({
               rows={5}
               placeholder="Tell us about the project, scope, urgency, or support requirement."
               {...form.register("message")}
-              className="rounded-[1.35rem] border-white/10 bg-[#020617]/55 text-white placeholder:text-[#fff6d8]/32"
+              className="rounded-[1.35rem] border-[color:var(--border-strong)] bg-[color:var(--surface-strong)] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)]"
             />
           }
         />
 
-        <div className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4">
+        <div className="premium-card rounded-[1.4rem] p-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <a
               href={`https://wa.me/${siteConfig.whatsapp}`}
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#fff6d8] hover:text-white"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--foreground)] hover:opacity-80"
             >
-              <MessageCircle className="size-4 text-[#f6b11a]" />
+              <MessageCircle className="size-4 text-[#F4A300]" />
               WhatsApp now
             </a>
             <a
               href={`tel:${siteConfig.phone}`}
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#fff6d8] hover:text-white"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--foreground)] hover:opacity-80"
             >
-              <PhoneCall className="size-4 text-[#0098ff]" />
+              <PhoneCall className="size-4 text-[#007BFF]" />
               Call {siteConfig.phone}
             </a>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm leading-6 text-[#fff6d8]/56">
+          <p className="text-sm leading-6 text-[color:var(--muted-foreground)]">
             Leads go directly into the CRM with source tracking and activity logging.
           </p>
           <Button
             type="submit"
             disabled={isPending}
-            className="h-12 rounded-full bg-[linear-gradient(135deg,#ffcf5a,#f6b11a_45%,#ff8a00)] px-6 font-semibold text-[#07111f] shadow-[0_12px_30px_rgba(246,177,26,0.28)]"
+            className="h-12 rounded-full bg-[linear-gradient(135deg,#F4A300,#FFCC33)] px-6 font-semibold text-[#06111F] shadow-[0_12px_30px_rgba(244,163,0,0.28)]"
           >
             {isPending ? "Submitting..." : copy.submitLabel}
           </Button>
@@ -300,30 +300,32 @@ function LeadCaptureFormFrame({
   return (
     <Card
       className={cn(
-        "rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04)_45%,rgba(2,6,23,0.42))] py-0 text-zinc-100 shadow-[0_28px_90px_rgba(0,0,0,0.24)]",
+        "premium-card-strong rounded-[2rem] py-0 text-[color:var(--foreground)]",
         className,
       )}
     >
       <CardContent className="p-6 sm:p-8">
         <div className="mb-6 space-y-3">
-          <div className="inline-flex rounded-full border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.14),rgba(0,152,255,0.1))] px-3 py-1 text-[11px] font-semibold tracking-[0.24em] text-[#fff6d8] uppercase">
+          <div className="premium-chip inline-flex rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.24em] uppercase">
             Lead capture
           </div>
-          <h3 className="font-heading text-3xl font-medium text-white">{copy.title}</h3>
-          <p className="text-sm leading-7 text-[#fff6d8]/72">{copy.description}</p>
+          <h3 className="font-heading text-3xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">
+            {copy.title}
+          </h3>
+          <p className="text-sm leading-7 text-[color:var(--muted-foreground)]">{copy.description}</p>
         </div>
         {isLoading ? (
           <div className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="h-12 rounded-2xl bg-white/8" />
-              <div className="h-12 rounded-2xl bg-white/8" />
+              <div className="h-12 rounded-2xl bg-[color:var(--surface-accent)]" />
+              <div className="h-12 rounded-2xl bg-[color:var(--surface-accent)]" />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="h-12 rounded-2xl bg-white/8" />
-              <div className="h-12 rounded-2xl bg-white/8" />
+              <div className="h-12 rounded-2xl bg-[color:var(--surface-accent)]" />
+              <div className="h-12 rounded-2xl bg-[color:var(--surface-accent)]" />
             </div>
-            <div className="h-32 rounded-[1.5rem] bg-white/8" />
-            <div className="h-12 rounded-full bg-amber-300/20" />
+            <div className="h-32 rounded-[1.5rem] bg-[color:var(--surface-accent)]" />
+            <div className="h-12 rounded-full bg-[#F4A300]/20" />
           </div>
         ) : (
           children
@@ -344,7 +346,7 @@ function Field({
 }) {
   return (
     <label className="grid gap-2">
-      <span className="text-sm font-medium text-[#fff6d8]">{label}</span>
+      <span className="text-sm font-medium text-[color:var(--foreground)]">{label}</span>
       {input}
       {error ? <span className="text-xs text-rose-300">{error}</span> : null}
     </label>

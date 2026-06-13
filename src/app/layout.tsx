@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { StructuredData } from "@/components/seo/structured-data";
 import { SiteShell } from "@/components/website/site-shell";
+import { ThemeProvider } from "@/components/website/theme-provider";
 import { siteConfig } from "@/config/site";
 import { buildMetadata } from "@/lib/metadata";
 import { buildLocalBusinessSchema, buildWebsiteSchema } from "@/lib/structured-data";
@@ -23,10 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full dark antialiased" suppressHydrationWarning>
       <body className="min-h-full">
         <StructuredData data={[buildWebsiteSchema(), buildLocalBusinessSchema()]} />
-        <SiteShell>{children}</SiteShell>
+        <ThemeProvider>
+          <SiteShell>{children}</SiteShell>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -39,15 +39,17 @@ export default function BlogPage() {
             <article
               key={post.title}
               id={post.href.split("#")[1]}
-              className="rounded-[2rem] border border-white/10 bg-white/4 p-7"
+              className="premium-card rounded-[2rem] p-7"
             >
-              <div className="text-[11px] font-semibold tracking-[0.24em] text-amber-200 uppercase">
+              <div className="text-[11px] font-semibold tracking-[0.24em] text-[#007BFF] uppercase">
                 Insight
               </div>
-              <h2 className="mt-4 font-heading text-2xl font-medium text-white">
+              <h2 className="mt-4 font-heading text-2xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">
                 {post.title}
               </h2>
-              <p className="mt-4 text-sm leading-7 text-zinc-300">{post.excerpt}</p>
+              <p className="mt-4 text-sm leading-7 text-[color:var(--muted-foreground)]">
+                {post.excerpt}
+              </p>
             </article>
           ))}
         </div>

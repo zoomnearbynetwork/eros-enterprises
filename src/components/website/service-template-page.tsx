@@ -33,7 +33,7 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
             <Button
               asChild
               size="lg"
-              className="h-12 rounded-full bg-[linear-gradient(135deg,#ffcf5a,#f6b11a_45%,#ff8a00)] px-6 font-semibold text-[#07111f]"
+              className="h-12 rounded-full bg-[linear-gradient(135deg,#F4A300,#FFCC33)] px-6 font-semibold text-[#06111F]"
             >
               <Link href="/contact">Request this service</Link>
             </Button>
@@ -41,31 +41,33 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
               asChild
               size="lg"
               variant="outline"
-              className="h-12 rounded-full border-[#0098ff]/30 bg-[#0098ff]/10 px-6 text-white hover:bg-[#0098ff]/18"
+              className="h-12 rounded-full border-[color:var(--border-strong)] bg-[color:var(--surface-elevated)] px-6 text-[color:var(--foreground)] hover:bg-[color:var(--surface-accent)]"
             >
               <Link href="/services">View all services</Link>
             </Button>
           </>
         }
         aside={
-          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04)_46%,rgba(2,6,23,0.42))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.18),rgba(0,152,255,0.12))] text-[#fff6d8]">
+          <div className="premium-card rounded-[2rem] p-7">
+            <div className="flex size-14 items-center justify-center rounded-2xl border border-[color:var(--border-strong)] bg-[linear-gradient(135deg,rgba(244,163,0,0.18),rgba(0,166,255,0.12))] text-[color:var(--foreground)]">
               <WebsiteIcon name={service.icon} className="size-7" />
             </div>
-            <h2 className="mt-6 font-heading text-3xl font-medium text-white">
+            <h2 className="mt-6 font-heading text-3xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">
               {service.name}
             </h2>
-            <p className="mt-4 text-sm leading-7 text-[#fff6d8]/72">
+            <p className="mt-4 text-sm leading-7 text-[color:var(--muted-foreground)]">
               {service.summary}
             </p>
             <div className="mt-6 space-y-3">
               {service.highlights.slice(0, 3).map((highlight) => (
                 <div
                   key={highlight}
-                  className="flex gap-3 rounded-2xl border border-white/10 bg-[#020617]/48 px-4 py-4"
+                  className="premium-card flex gap-3 rounded-2xl px-4 py-4"
                 >
-                  <WebsiteIcon name="badge" className="mt-0.5 size-4 text-[#f6b11a]" />
-                  <p className="text-sm leading-7 text-[#fff6d8]/72">{highlight}</p>
+                  <WebsiteIcon name="badge" className="mt-0.5 size-4 text-[#F4A300]" />
+                  <p className="text-sm leading-7 text-[color:var(--muted-foreground)]">
+                    {highlight}
+                  </p>
                 </div>
               ))}
             </div>
@@ -86,7 +88,7 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
         </div>
       </Section>
 
-      <Section className="border-y border-white/10 bg-white/[0.02]">
+      <Section className="surface-divider">
         <FadeIn>
           <SectionHeader
             eyebrow="Highlights"
@@ -97,9 +99,11 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
         <StaggerGroup className="mt-10 grid gap-4 lg:grid-cols-2">
           {service.highlights.map((highlight) => (
             <StaggerItem key={highlight}>
-              <div className="flex h-full gap-4 rounded-[2rem] border border-white/10 bg-white/4 p-6">
-                <WebsiteIcon name="badge" className="mt-1 size-5 text-[#f6b11a]" />
-                <p className="text-sm leading-7 text-[#fff6d8]/72">{highlight}</p>
+              <div className="premium-card flex h-full gap-4 rounded-[2rem] p-6">
+                <WebsiteIcon name="badge" className="mt-1 size-5 text-[#F4A300]" />
+                <p className="text-sm leading-7 text-[color:var(--muted-foreground)]">
+                  {highlight}
+                </p>
               </div>
             </StaggerItem>
           ))}
@@ -126,7 +130,7 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
         </div>
       </Section>
 
-      <Section className="border-y border-white/10 bg-white/[0.02]">
+      <Section className="surface-divider">
         <FadeIn>
           <SectionHeader
             eyebrow="Project examples"
@@ -166,7 +170,7 @@ export function ServiceTemplatePage({ service }: { service: ServiceDefinition })
         </div>
       </Section>
 
-      <Section className="border-t border-white/10">
+      <Section className="surface-divider">
         <FadeIn>
           <SectionHeader
             eyebrow="Related services"

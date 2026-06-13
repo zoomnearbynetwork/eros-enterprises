@@ -46,12 +46,12 @@ export default function ProductsPage() {
           {productCategories.map((category) => (
             <div
               key={category.title}
-              className="rounded-[2rem] border border-white/10 bg-white/4 p-7"
+              className="premium-card rounded-[2rem] p-7"
             >
-              <h3 className="font-heading text-2xl font-medium text-white">
+              <h3 className="font-heading text-2xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">
                 {category.title}
               </h3>
-              <p className="mt-4 text-sm leading-7 text-zinc-300">
+              <p className="mt-4 text-sm leading-7 text-[color:var(--muted-foreground)]">
                 {category.description}
               </p>
             </div>

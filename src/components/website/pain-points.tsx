@@ -10,10 +10,10 @@ export function PainPoints({
       {items.map((item) => (
         <div
           key={item}
-          className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04)_48%,rgba(2,6,23,0.4))] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.2)]"
+          className="premium-card rounded-[1.8rem] p-6"
         >
-          <WebsiteIcon name="star" className="size-5 text-[#f6b11a]" />
-          <p className="mt-4 text-sm leading-7 text-[#fff6d8]/72">{item}</p>
+          <WebsiteIcon name="star" className="size-5 text-[#F4A300]" />
+          <p className="mt-4 text-sm leading-7 text-[color:var(--muted-foreground)]">{item}</p>
         </div>
       ))}
     </div>

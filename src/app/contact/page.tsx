@@ -44,41 +44,41 @@ export default function ContactPage() {
               title="Multiple ways to reach the Eros team."
               description="For larger scopes, a site visit or scoped quotation request usually creates the best starting point."
             />
-            <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04)_48%,rgba(2,6,23,0.38))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-              <div className="grid gap-5 text-sm text-[#fff6d8]/72">
+            <div className="premium-card rounded-[2rem] p-7">
+              <div className="grid gap-5 text-sm text-[color:var(--muted-foreground)]">
                 <div>
-                  <div className="text-[#fff6d8]/42">Phone</div>
-                  <a href={`tel:${siteConfig.phone}`} className="mt-1 block text-white">
+                  <div className="text-[color:var(--muted-foreground)]/70">Phone</div>
+                  <a href={`tel:${siteConfig.phone}`} className="mt-1 block text-[color:var(--foreground)]">
                     {siteConfig.phone}
                   </a>
                 </div>
                 <div>
-                  <div className="text-[#fff6d8]/42">Email</div>
+                  <div className="text-[color:var(--muted-foreground)]/70">Email</div>
                   <a
                     href={`mailto:${siteConfig.email}`}
-                    className="mt-1 block text-white"
+                    className="mt-1 block text-[color:var(--foreground)]"
                   >
                     {siteConfig.email}
                   </a>
                 </div>
                 <div>
-                  <div className="text-[#fff6d8]/42">Location</div>
-                  <div className="mt-1 text-white">{siteConfig.address}</div>
+                  <div className="text-[color:var(--muted-foreground)]/70">Location</div>
+                  <div className="mt-1 text-[color:var(--foreground)]">{siteConfig.address}</div>
                 </div>
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <a
                   href={`https://wa.me/${siteConfig.whatsapp}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#0098ff]/30 bg-[#0098ff]/10 px-4 py-3 text-sm font-medium text-white hover:bg-[#0098ff]/18"
+                  className="theme-transition inline-flex items-center gap-2 rounded-full border border-[color:var(--border-strong)] bg-[color:var(--surface-elevated)] px-4 py-3 text-sm font-medium text-[color:var(--foreground)] hover:bg-[color:var(--surface-accent)]"
                 >
-                  <MessageCircle className="size-4 text-[#f6b11a]" />
+                  <MessageCircle className="size-4 text-[#F4A300]" />
                   WhatsApp Now
                 </a>
                 <a
                   href={`tel:${siteConfig.phone}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-3 text-sm font-medium text-white hover:bg-white/10"
+                  className="theme-transition inline-flex items-center gap-2 rounded-full border border-[color:var(--border-strong)] bg-[color:var(--surface-elevated)] px-4 py-3 text-sm font-medium text-[color:var(--foreground)] hover:bg-[color:var(--surface-accent)]"
                 >
-                  <PhoneCall className="size-4 text-[#0098ff]" />
+                  <PhoneCall className="size-4 text-[#007BFF]" />
                   Call Eros
                 </a>
               </div>

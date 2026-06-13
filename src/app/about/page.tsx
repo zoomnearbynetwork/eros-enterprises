@@ -37,12 +37,12 @@ export default function AboutPage() {
             {whyChooseEros.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[2rem] border border-white/10 bg-white/4 p-6"
+                className="premium-card rounded-[2rem] p-6"
               >
-                <h3 className="font-heading text-2xl font-medium text-white">
+                <h3 className="font-heading text-2xl font-semibold tracking-[-0.03em] text-[color:var(--foreground)]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-zinc-300">
+                <p className="mt-3 text-sm leading-7 text-[color:var(--muted-foreground)]">
                   {item.description}
                 </p>
               </div>

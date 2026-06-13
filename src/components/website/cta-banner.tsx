@@ -25,27 +25,28 @@ export function CtaBanner({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[2rem] border border-[#f6b11a]/18 bg-[linear-gradient(135deg,rgba(246,177,26,0.18),rgba(0,152,255,0.08)_42%,rgba(2,6,23,0.74))] p-8 shadow-[0_28px_90px_rgba(0,0,0,0.26)]",
+        "premium-card-strong relative overflow-hidden rounded-[2rem] p-8",
         className
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(246,177,26,0.24),transparent_24%),radial-gradient(circle_at_84%_28%,rgba(0,152,255,0.18),transparent_24%)]" />
-      <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-[#f6b11a]/80 to-transparent" />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,71,179,0.92),rgba(0,166,255,0.58)_48%,rgba(244,163,0,0.42)_82%,rgba(255,204,51,0.34))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(255,204,51,0.28),transparent_24%),radial-gradient(circle_at_84%_28%,rgba(255,255,255,0.18),transparent_24%)]" />
+      <div className="absolute inset-x-16 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl space-y-4">
-          <span className="inline-flex rounded-full border border-white/10 bg-white/8 px-4 py-1.5 text-[11px] font-semibold tracking-[0.28em] text-[#fff6d8] uppercase">
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-semibold tracking-[0.28em] text-white uppercase">
             Start your project
           </span>
-          <h3 className="font-heading text-3xl font-medium text-white sm:text-4xl lg:text-5xl">
+          <h3 className="font-heading text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl lg:text-5xl">
             {title}
           </h3>
-          <p className="text-base leading-8 text-[#fff6d8]/76">{description}</p>
+          <p className="text-base leading-8 text-white/78">{description}</p>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Button
             asChild
             size="lg"
-            className="h-12 rounded-full bg-[linear-gradient(135deg,#ffcf5a,#f6b11a_45%,#ff8a00)] px-6 font-semibold text-[#07111f] shadow-[0_12px_34px_rgba(246,177,26,0.28)]"
+            className="h-12 rounded-full bg-[linear-gradient(135deg,#F4A300,#FFCC33)] px-6 font-semibold text-[#06111f] shadow-[0_12px_34px_rgba(244,163,0,0.28)]"
           >
             <Link href={primaryHref} className="inline-flex items-center gap-2">
               {primaryLabel}
@@ -56,7 +57,7 @@ export function CtaBanner({
             asChild
             size="lg"
             variant="outline"
-            className="h-12 rounded-full border-[#0098ff]/30 bg-[#0098ff]/10 px-6 text-white hover:bg-[#0098ff]/18"
+            className="h-12 rounded-full border-white/25 bg-white/10 px-6 text-white hover:bg-white/16"
           >
             <Link href={secondaryHref}>{secondaryLabel}</Link>
           </Button>
@@ -64,13 +65,13 @@ export function CtaBanner({
             asChild
             size="lg"
             variant="ghost"
-            className="h-12 rounded-full bg-white/6 px-6 text-[#fff6d8] hover:bg-white/10"
+            className="h-12 rounded-full bg-[#06111f]/20 px-6 text-white hover:bg-[#06111f]/32"
           >
             <a
               href={`https://wa.me/${siteConfig.whatsapp}`}
               className="inline-flex items-center gap-2"
             >
-              <MessageCircle className="size-4 text-[#f6b11a]" />
+              <MessageCircle className="size-4 text-[#FFCC33]" />
               WhatsApp Now
             </a>
           </Button>
