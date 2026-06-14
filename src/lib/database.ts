@@ -26,11 +26,17 @@ function isErrorWithCode(
 }
 
 export function isRecoverableDatabaseError(error: unknown) {
-  if (
-    error instanceof Prisma.PrismaClientInitializationError ||
-    error instanceof Prisma.PrismaClientRustPanicError
-  ) {
-    return true;
+  try {
+    if (
+      (typeof Prisma?.PrismaClientInitializationError !== "undefined" &&
+        error instanceof Prisma.PrismaClientInitializationError) ||
+      (typeof Prisma?.PrismaClientRustPanicError !== "undefined" &&
+        error instanceof Prisma.PrismaClientRustPanicError)
+    ) {
+      return true;
+    }
+  } catch {
+    return false;
   }
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
