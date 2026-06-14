@@ -9,6 +9,8 @@ import { WHATSAPP_PROVIDER_LABELS } from "@/features/whatsapp/constants";
 import { WhatsAppInboxPanel } from "@/features/whatsapp/components/whatsapp-inbox-panel";
 import { getWhatsAppInbox } from "@/features/whatsapp/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -26,16 +28,10 @@ export default async function DashboardWhatsAppPage(
   const linkedThreads = inbox.conversations.filter((item) => item.leadId || item.customerId).length;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Communication</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">WhatsApp Inbox</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          A provider-ready inbox for lead and customer conversations, with linked message history and safe simulation tools until a real WhatsApp channel is connected.
-        </p>
-      </div>
+    <DashboardShell title="WhatsApp">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Conversations" value={numberFormatter.format(inbox.conversations.length)} />
         <MetricCard label="Messages stored" value={numberFormatter.format(totalMessages)} />
         <MetricCard label="Linked threads" value={numberFormatter.format(linkedThreads)} />
@@ -204,7 +200,8 @@ export default async function DashboardWhatsAppPage(
           </Card>
         </div>
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

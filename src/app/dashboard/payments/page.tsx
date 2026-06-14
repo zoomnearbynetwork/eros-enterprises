@@ -13,6 +13,8 @@ import {
 } from "@/features/crm/components/status-badges";
 import { formatCurrency, numberFormatter, shortDateFormatter } from "@/features/crm/utils";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -32,16 +34,10 @@ export default async function DashboardPaymentsPage(
   ]);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Sales Billing</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Payments</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          Record collections, keep invoice balances in sync, and maintain a clean finance activity trail.
-        </p>
-      </div>
+    <DashboardShell title="Payments">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Collected Amount" value={formatCurrency(metrics.collectedAmount)} />
         <MetricCard label="Pending Amount" value={formatCurrency(metrics.pendingAmount)} />
         <MetricCard label="Payments Logged" value={numberFormatter.format(payments.length)} />
@@ -126,7 +122,8 @@ export default async function DashboardPaymentsPage(
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

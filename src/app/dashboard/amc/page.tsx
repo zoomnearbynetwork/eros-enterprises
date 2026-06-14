@@ -11,6 +11,8 @@ import {
   getAmcPlans,
 } from "@/features/projects/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -33,16 +35,10 @@ export default async function DashboardAmcPage(
   ]);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Retention</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">AMC Plans</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          Track maintenance contracts, renewal windows, and customer retention opportunities without sending real reminders yet.
-        </p>
-      </div>
+    <DashboardShell title="AMC Plans">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Total AMC Plans" value={numberFormatter.format(metrics.totalAmcPlans)} />
         <MetricCard label="Due Soon" value={numberFormatter.format(metrics.dueSoonCount)} />
         <MetricCard label="Expired" value={numberFormatter.format(metrics.expiredCount)} />
@@ -129,7 +125,8 @@ export default async function DashboardAmcPage(
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

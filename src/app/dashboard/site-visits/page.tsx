@@ -6,6 +6,8 @@ import { numberFormatter } from "@/features/crm/utils";
 import { SiteVisitTable } from "@/features/site-visits/components/site-visit-table";
 import { getSiteVisits } from "@/features/site-visits/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -25,16 +27,10 @@ export default async function DashboardSiteVisitsPage(
   const siteVisits = await getSiteVisits(filters);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">CRM</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Site Visits</h1>
-        <p className="mt-2 max-w-2xl text-zinc-400">
-          Schedule, assign, and complete technical site visits with clean field visibility.
-        </p>
-      </div>
+    <DashboardShell title="Site Visits">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Total visits" value={numberFormatter.format(siteVisits.length)} />
         <MetricCard label="Scheduled" value={numberFormatter.format(siteVisits.filter((item) => item.status === "SCHEDULED").length)} />
         <MetricCard label="Completed" value={numberFormatter.format(siteVisits.filter((item) => item.status === "COMPLETED").length)} />
@@ -86,7 +82,8 @@ export default async function DashboardSiteVisitsPage(
           </CardContent>
         </Card>
       )}
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

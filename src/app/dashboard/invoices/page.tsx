@@ -13,6 +13,8 @@ import {
 } from "@/features/crm/constants";
 import { formatCurrency, numberFormatter, shortDateFormatter } from "@/features/crm/utils";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -35,16 +37,10 @@ export default async function DashboardInvoicesPage(
   ]);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Sales Billing</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Invoices</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          Convert accepted quotations into collectible invoices, watch balances move, and surface overdue follow-ups early.
-        </p>
-      </div>
+    <DashboardShell title="Invoices">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Invoiced Value" value={formatCurrency(metrics.invoicedValue)} />
         <MetricCard label="Collected" value={formatCurrency(metrics.collectedAmount)} />
         <MetricCard label="Pending" value={formatCurrency(metrics.pendingAmount)} />
@@ -148,7 +144,8 @@ export default async function DashboardInvoicesPage(
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

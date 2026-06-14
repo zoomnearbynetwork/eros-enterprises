@@ -9,6 +9,8 @@ import { numberFormatter } from "@/features/crm/utils";
 import { CustomerTable } from "@/features/customers/components/customer-table";
 import { getCustomers } from "@/features/customers/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -28,16 +30,10 @@ export default async function DashboardCustomersPage(
   const customers = await getCustomers(filters);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">CRM</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Customers</h1>
-        <p className="mt-2 max-w-2xl text-zinc-400">
-          Converted leads, retained customers, and all future commercial modules start here.
-        </p>
-      </div>
+    <DashboardShell title="Customers">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Total customers" value={numberFormatter.format(customers.length)} />
         <MetricCard label="Active" value={numberFormatter.format(customers.filter((item) => item.status === "ACTIVE").length)} />
         <MetricCard label="From leads" value={numberFormatter.format(customers.filter((item) => item.lead).length)} />
@@ -91,7 +87,8 @@ export default async function DashboardCustomersPage(
           </CardContent>
         </Card>
       )}
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

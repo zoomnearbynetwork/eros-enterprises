@@ -11,6 +11,8 @@ import {
   getProjects,
 } from "@/features/projects/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -33,16 +35,10 @@ export default async function DashboardProjectsPage(
   ]);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Operations</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Projects</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          Move accepted work into delivery, track execution stage by stage, and keep commercial records attached all the way through closure.
-        </p>
-      </div>
+    <DashboardShell title="Projects">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Total Projects" value={numberFormatter.format(metrics.totalProjects)} />
         <MetricCard label="Active" value={numberFormatter.format(metrics.activeProjects)} />
         <MetricCard label="Completed" value={numberFormatter.format(metrics.completedProjects)} />
@@ -136,7 +132,8 @@ export default async function DashboardProjectsPage(
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

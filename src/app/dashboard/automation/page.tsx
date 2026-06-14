@@ -13,6 +13,8 @@ import {
 } from "@/features/automation/constants";
 import { getAutomationDashboard } from "@/features/automation/repository";
 
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+
 export const dynamic = "force-dynamic";
 
 function getStringParam(value: string | string[] | undefined) {
@@ -31,16 +33,10 @@ export default async function DashboardAutomationPage(
   ).length;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <div className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Automation</div>
-        <h1 className="mt-3 font-heading text-4xl text-white">Automation Rules</h1>
-        <p className="mt-2 max-w-3xl text-zinc-400">
-          Configure trigger-based follow-ups for the CRM lifecycle now, with action payloads ready for future workers, task engines, and WhatsApp delivery providers.
-        </p>
-      </div>
+    <DashboardShell title="Automation">
+      <div className="px-4 py-5 space-y-6">
 
-      <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Rules" value={numberFormatter.format(automation.rules.length)} />
         <MetricCard label="Active" value={numberFormatter.format(activeRules)} />
         <MetricCard label="WhatsApp actions" value={numberFormatter.format(whatsappRules)} />
@@ -120,7 +116,8 @@ export default async function DashboardAutomationPage(
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </DashboardShell>
   );
 }
 

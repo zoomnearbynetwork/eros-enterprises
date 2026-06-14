@@ -139,11 +139,12 @@ function DashboardTopBar({
 }) {
   return (
     <header
-      className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-4"
+      className="flex items-center justify-between px-4"
       style={{
         height: "52px",
         background: "#0A1628",
         borderBottom: "1px solid rgba(245,166,35,0.12)",
+        flexShrink: 0,
       }}
     >
       <div className="flex min-w-0 flex-col justify-center">
@@ -197,7 +198,7 @@ function DashboardBottomNav({ onAddPress }: { onAddPress: () => void }) {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40"
+      className="flex-shrink-0"
       style={{
         height: "60px",
         background: "#0A1628",
@@ -271,86 +272,82 @@ function DashboardBottomNav({ onAddPress }: { onAddPress: () => void }) {
   );
 }
 
-function QuickAddSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+function QuickAddSheet({ onClose }: { onClose: () => void }) {
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            className="fixed inset-0 z-50"
-            style={{ background: "rgba(0,0,0,0.6)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
+    <>
+      <motion.div
+        className="fixed inset-0 z-50"
+        style={{ background: "rgba(0,0,0,0.6)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+      />
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-lg rounded-t-[1.75rem] px-5 pb-10 pt-5"
+        style={{
+          background: "#0F1F3D",
+          borderTop: "1px solid rgba(255,255,255,0.07)",
+          borderLeft: "1px solid rgba(255,255,255,0.07)",
+          borderRight: "1px solid rgba(255,255,255,0.07)",
+        }}
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 30, stiffness: 320 }}
+      >
+        <div className="mb-1 flex justify-center">
+          <div
+            className="h-1 w-10 rounded-full"
+            style={{ background: "rgba(255,255,255,0.15)" }}
           />
-          <motion.div
-            className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-lg rounded-t-[1.75rem] px-5 pb-10 pt-5"
-            style={{
-              background: "#0F1F3D",
-              borderTop: "1px solid rgba(255,255,255,0.07)",
-              borderLeft: "1px solid rgba(255,255,255,0.07)",
-              borderRight: "1px solid rgba(255,255,255,0.07)",
-            }}
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 320 }}
+        </div>
+        <div className="mb-5 mt-3 flex items-center justify-between">
+          <span style={{ fontSize: "15px", fontWeight: 600, color: "#FFFFFF" }}>
+            Quick add
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-7 w-7 items-center justify-center rounded-full"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+            aria-label="Close"
           >
-            <div className="mb-1 flex justify-center">
+            <X size={14} color="rgba(255,255,255,0.65)" />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {QUICK_ACTIONS.map((action) => (
+            <Link
+              key={action.label}
+              href={action.href}
+              onClick={onClose}
+              className="flex items-center gap-3 rounded-2xl p-3.5 transition-opacity active:opacity-70"
+              style={{
+                background: action.bg,
+                border: `1px solid ${action.border}`,
+              }}
+            >
               <div
-                className="h-1 w-10 rounded-full"
-                style={{ background: "rgba(255,255,255,0.15)" }}
-              />
-            </div>
-            <div className="mb-5 mt-3 flex items-center justify-between">
-              <span style={{ fontSize: "15px", fontWeight: 600, color: "#FFFFFF" }}>
-                Quick add
-              </span>
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex h-7 w-7 items-center justify-center rounded-full"
-                style={{ background: "rgba(255,255,255,0.08)" }}
-                aria-label="Close"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                style={{ background: `${action.color}20`, color: action.color }}
               >
-                <X size={14} color="rgba(255,255,255,0.65)" />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {QUICK_ACTIONS.map((action) => (
-                <Link
-                  key={action.label}
-                  href={action.href}
-                  onClick={onClose}
-                  className="flex items-center gap-3 rounded-2xl p-3.5 transition-opacity active:opacity-70"
-                  style={{
-                    background: action.bg,
-                    border: `1px solid ${action.border}`,
-                  }}
-                >
-                  <div
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: `${action.color}20`, color: action.color }}
-                  >
-                    {action.isWa ? (
-                      <WhatsAppIcon size={18} />
-                    ) : (
-                      <action.Icon size={18} />
-                    )}
-                  </div>
-                  <span
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#FFFFFF", lineHeight: 1.3 }}
-                  >
-                    {action.label}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+                {action.isWa ? (
+                  <WhatsAppIcon size={18} />
+                ) : (
+                  <action.Icon size={18} />
+                )}
+              </div>
+              <span
+                style={{ fontSize: "13px", fontWeight: 500, color: "#FFFFFF", lineHeight: 1.3 }}
+              >
+                {action.label}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+    </>
   );
 }
 
@@ -382,8 +379,6 @@ function DesktopSidebar({ onQuickAdd }: { onQuickAdd: () => void }) {
         transition: "width 0.22s cubic-bezier(0.4,0,0.2,1)",
         overflow: "hidden",
         flexShrink: 0,
-        position: "sticky",
-        top: 0,
         height: "100vh",
         background: "#0A1628",
         borderRight: "1px solid rgba(255,255,255,0.07)",
@@ -681,21 +676,125 @@ export function DashboardShell({
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
-    <div style={{ background: "#050A14", minHeight: "100vh", display: "flex" }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: "#050A14" }}>
       {/* Desktop sidebar — hidden on mobile */}
-      <div className="hidden lg:block" style={{ flexShrink: 0 }}>
+      <div className="hidden lg:flex flex-shrink-0">
         <DesktopSidebar onQuickAdd={() => setSheetOpen(true)} />
       </div>
 
-      {/* Content column */}
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+      {/* Main content column */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         {/* Mobile-only top bar */}
         <div className="lg:hidden">
           <DashboardTopBar title={title} subtitle={subtitle} actions={actions} />
         </div>
 
-        {/* Main content — offset for mobile fixed bars, no offset on desktop */}
-        <main className="flex-1 pt-[52px] pb-[80px] lg:pt-0 lg:pb-0">
+        {/* Desktop top bar */}
+        <div
+          className="hidden lg:flex items-center justify-between px-6 flex-shrink-0"
+          style={{
+            height: "52px",
+            background: "#0A1628",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontFamily: "Poppins, sans-serif",
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#fff",
+                margin: 0,
+              }}
+            >
+              {title}
+            </p>
+            {subtitle && (
+              <p
+                style={{
+                  fontSize: 10,
+                  color: "rgba(255,255,255,0.35)",
+                  margin: 0,
+                  marginTop: 1,
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {/* Search bar */}
+            <div
+              style={{
+                background: "#0F1F3D",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 7,
+                padding: "6px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: 7,
+                cursor: "text",
+              }}
+            >
+              <i
+                className="ti ti-search"
+                style={{ fontSize: 14, color: "rgba(255,255,255,0.35)" }}
+                aria-hidden="true"
+              />
+              <span
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.35)",
+                  fontFamily: "Inter, sans-serif",
+                }}
+              >
+                Search CRM...
+              </span>
+            </div>
+            {/* Notification bell */}
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 7,
+                background: "#0F1F3D",
+                border: "1px solid rgba(255,255,255,0.07)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "relative",
+                cursor: "pointer",
+              }}
+            >
+              <i
+                className="ti ti-bell"
+                style={{ fontSize: 16, color: "rgba(255,255,255,0.65)" }}
+                aria-hidden="true"
+              />
+              <div
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "50%",
+                  background: "#EF5350",
+                  border: "1.5px solid #0A1628",
+                  position: "absolute",
+                  top: 4,
+                  right: 4,
+                }}
+              />
+            </div>
+            {/* Actions slot */}
+            {actions}
+          </div>
+        </div>
+
+        {/* Scrollable page content */}
+        <main
+          className="flex-1 overflow-y-auto pt-0 pb-20 lg:pb-0"
+          style={{ background: "#050A14" }}
+        >
           {children}
         </main>
 
@@ -705,7 +804,10 @@ export function DashboardShell({
         </div>
       </div>
 
-      <QuickAddSheet isOpen={sheetOpen} onClose={() => setSheetOpen(false)} />
+      {/* Quick add sheet — rendered outside the content column so it overlays correctly */}
+      <AnimatePresence>
+        {sheetOpen && <QuickAddSheet onClose={() => setSheetOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }
