@@ -1,40 +1,42 @@
 "use client";
 
-import { MonitorCog, MoonStar, SunMedium } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/website/theme-provider";
-import { cn } from "@/lib/utils";
 
-export function ThemeToggle({ className }: { className?: string }) {
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
+export function ThemeToggle() {
+  const { theme, toggle } = useTheme();
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      size="icon"
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      onClick={toggleTheme}
-      className={cn(
-        "theme-transition relative size-11 rounded-full border-[color:var(--border-strong)] bg-[color:var(--surface-elevated)] text-[color:var(--foreground)] shadow-[var(--shadow-soft)] hover:bg-[color:var(--surface-accent)]",
-        className,
-      )}
+    <button
+      onClick={toggle}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      className="relative w-[56px] h-[28px] rounded-full transition-all duration-300 flex-shrink-0"
+      style={{
+        background: theme === "dark"
+          ? "rgba(21,101,192,0.25)"
+          : "rgba(21,101,192,0.15)",
+        border: theme === "dark"
+          ? "1px solid rgba(21,101,192,0.4)"
+          : "1px solid rgba(21,101,192,0.3)",
+      }}
     >
-      <SunMedium
-        className={cn(
-          "absolute size-4 transition-all duration-300",
-          isDark ? "scale-0 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100",
-        )}
-      />
-      <MoonStar
-        className={cn(
-          "absolute size-4 transition-all duration-300",
-          isDark ? "scale-100 rotate-0 opacity-100" : "scale-0 -rotate-90 opacity-0",
-        )}
-      />
-      <MonitorCog className="sr-only" />
-    </Button>
+      {/* Track icons */}
+      <span className="absolute left-[6px] top-1/2 -translate-y-1/2 text-[12px] select-none">
+        {theme === "dark" ? "🌙" : "☀️"}
+      </span>
+      <span className="absolute right-[6px] top-1/2 -translate-y-1/2 text-[12px] select-none opacity-40">
+        {theme === "dark" ? "☀️" : "🌙"}
+      </span>
+      {/* Knob */}
+      <span
+        className="absolute top-[3px] w-[22px] h-[22px] rounded-full shadow-md transition-all duration-300 flex items-center justify-center text-[11px]"
+        style={{
+          left: theme === "dark" ? "calc(100% - 25px)" : "3px",
+          background: theme === "dark" ? "#1565C0" : "#F5A623",
+          color: "#fff",
+        }}
+      >
+        {theme === "dark" ? "🌙" : "☀️"}
+      </span>
+    </button>
   );
 }

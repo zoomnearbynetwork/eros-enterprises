@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
+import Script from "next/script";
 
 import { StructuredData } from "@/components/seo/structured-data";
 import { SiteShell } from "@/components/website/site-shell";
@@ -33,16 +34,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
+      data-theme="dark"
       className={`h-full dark antialiased ${inter.variable} ${poppins.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-[#050A14] text-[#E8EAF0]">
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("eros-theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body
+        className="min-h-full antialiased"
+        style={{ background: "var(--e-bg)", color: "var(--e-text)" }}
+      >
         <StructuredData data={[buildWebsiteSchema(), buildLocalBusinessSchema()]} />
         <SiteShell>{children}</SiteShell>
       </body>
