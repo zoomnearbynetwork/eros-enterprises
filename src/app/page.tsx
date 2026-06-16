@@ -1,7 +1,24 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { QuoteForm } from "@/components/website/quote-form";
+import dynamic from "next/dynamic";
+
+const QuoteForm = dynamic(
+  () => import("@/components/website/quote-form").then((m) => m.QuoteForm),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="rounded-[20px] overflow-hidden animate-pulse"
+        style={{
+          background: "rgba(10,22,40,0.92)",
+          border: "1px solid rgba(21,101,192,0.25)",
+          minHeight: "440px",
+        }}
+      />
+    ),
+  }
+);
 
 const stats = [
   { num: "500+", label: "Projects Delivered" },
