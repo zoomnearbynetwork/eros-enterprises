@@ -62,25 +62,24 @@ export default function HomePage() {
                    style={{ background:"var(--e-gold-dim)", border:"1px solid rgba(245,166,35,0.3)", color:"var(--e-gold)" }}>
                 Mumbai&apos;s Premier Lighting &amp; ELV Integrator
               </div>
-              <h1 className="font-heading font-extrabold text-[40px] lg:text-[50px] leading-[1.1] mb-4 max-w-[520px]"
-                  style={{ color:"var(--e-text)" }}>
+              <h1 className="font-heading font-extrabold text-[40px] lg:text-[50px] leading-[1.1] mb-4 max-w-[520px] text-white">
                 Lighting that{" "}<em className="not-italic" style={{ color:"var(--e-gold)" }}>Elevates</em><br />Every Space
               </h1>
-              <p className="text-[15px] leading-[1.75] max-w-[460px] mb-7" style={{ color:"var(--e-muted)" }}>
+              <p className="text-[15px] leading-[1.75] max-w-[460px] mb-7" style={{ color:"#8896AA" }}>
                 From chandelier installations to smart automation and security systems — Eros Enterprises designs, supplies, and maintains environments that inspire. Trusted by 500+ clients since 2009.
               </p>
               <div className="flex gap-3 flex-wrap">
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1565C0] hover:bg-[#1E7FE8] text-white px-5 py-3 rounded-[8px] text-[13px] font-semibold transition-colors">Book Free Site Visit</Link>
-                <Link href="/projects" className="inline-flex items-center gap-2 px-5 py-3 rounded-[8px] text-[13px] font-semibold transition-colors"
-                      style={{ border:"1px solid var(--e-blue-bdr)", color:"var(--e-text)" }}>View Projects</Link>
+                <Link href="/projects" className="inline-flex items-center gap-2 px-5 py-3 rounded-[8px] text-[13px] font-semibold text-white transition-colors"
+                      style={{ border:"1px solid rgba(255,255,255,0.18)" }}>View Projects</Link>
               </div>
             </div>
             <div className="flex flex-row lg:flex-col gap-2.5 flex-wrap">
               {stats.map((s) => (
                 <div key={s.label} className="flex-1 min-w-[85px] rounded-[12px] px-4 py-3.5 text-center"
-                     style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)" }}>
+                     style={{ background:"rgba(15,31,61,0.85)", border:"1px solid rgba(21,101,192,0.22)" }}>
                   <div className="font-heading text-[28px] font-extrabold leading-none" style={{ color:"var(--e-gold)" }}>{s.num}</div>
-                  <div className="text-[10px] uppercase tracking-[0.05em] mt-1" style={{ color:"var(--e-muted)" }}>{s.label}</div>
+                  <div className="text-[10px] uppercase tracking-[0.05em] mt-1" style={{ color:"#8896AA" }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -177,60 +176,120 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PROJECTS */}
-      <section className="px-6 lg:px-10 py-14">
+      {/* PROJECTS — editorial masonry layout */}
+      <section className="px-6 lg:px-10 py-14" style={{ background:"var(--e-bg)" }}>
         <div className="max-w-[1100px] mx-auto">
           <div className="e-eyebrow mb-1.5">Our Work</div>
           <h2 className="font-heading font-extrabold text-[28px] mb-2.5" style={{ color:"var(--e-text)" }}>Featured <span style={{ color:"var(--e-gold)" }}>Projects</span></h2>
-          <p className="text-[14px] max-w-[480px] leading-[1.7] mb-8" style={{ color:"var(--e-muted)" }}>Recent installations across Mumbai&apos;s premier residential and commercial spaces.</p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {projects.map((p) => (
-              <div key={p.title} className="rounded-[14px] overflow-hidden"
-                   style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)" }}>
-                <div className="h-[155px] flex items-center justify-center text-[50px] relative"
-                     style={{ background: p.grad }}>
-                  <div className="absolute top-2.5 left-2.5 flex gap-1.5">
-                    <span className="tag-gold">{p.tag}</span>
-                    {p.tag2 && <span className="tag-blue">{p.tag2}</span>}
+          <p className="text-[14px] max-w-[480px] leading-[1.7] mb-7" style={{ color:"var(--e-muted)" }}>Recent installations across Mumbai&apos;s premier residential and commercial spaces.</p>
+
+          {/* Top row: 1 large featured + 2 stacked small */}
+          <div className="grid lg:grid-cols-[1.4fr_1fr] gap-3 mb-3">
+            {/* Large featured card */}
+            <div className="rounded-[16px] overflow-hidden flex flex-col"
+                 style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)", boxShadow:"0 4px 20px rgba(21,101,192,0.09)" }}>
+              <div className="h-[220px] flex items-center justify-center text-[60px] relative"
+                   style={{ background: projects[0].grad }}>
+                <div className="absolute top-3 left-3 flex gap-1.5">
+                  <span className="tag-gold">{projects[0].tag}</span>
+                  {projects[0].tag2 && <span className="tag-blue">{projects[0].tag2}</span>}
+                </div>
+                {projects[0].emoji}
+              </div>
+              <div className="p-5 flex flex-col flex-1 justify-between">
+                <div>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.12em] mb-2" style={{ color:"var(--e-blue)" }}>Featured Project</div>
+                  <h3 className="font-heading font-bold text-[17px] mb-2" style={{ color:"var(--e-text)" }}>{projects[0].title}</h3>
+                  <p className="text-[12px] leading-[1.6] mb-3" style={{ color:"var(--e-muted)" }}>{projects[0].desc}</p>
+                  <div className="flex gap-3 text-[10px] mb-4" style={{ color:"var(--e-muted2)" }}>
+                    <span>📍 {projects[0].loc}</span><span>📅 {projects[0].year}</span>
                   </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 pt-3" style={{ borderTop:"1px solid var(--e-card-bdr)" }}>
+                  {[["48","Pendants"],["12","Zones"],["2 Wks","Duration"]].map(([n,l]) => (
+                    <div key={l} className="text-center">
+                      <div className="font-heading text-[15px] font-extrabold" style={{ color:"var(--e-blue)" }}>{n}</div>
+                      <div className="text-[9px] mt-0.5" style={{ color:"var(--e-muted)" }}>{l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 2 stacked small cards */}
+            <div className="flex flex-col gap-3">
+              {projects.slice(1,3).map((p) => (
+                <div key={p.title} className="rounded-[12px] overflow-hidden flex flex-1"
+                     style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)", boxShadow:"0 2px 10px rgba(21,101,192,0.07)" }}>
+                  <div className="w-[100px] flex-shrink-0 flex items-center justify-center text-[32px] relative"
+                       style={{ background: p.grad }}>
+                    <div className="absolute top-2 left-2"><span className="tag-gold">{p.tag}</span></div>
+                    {p.emoji}
+                  </div>
+                  <div className="p-4 flex flex-col justify-between flex-1">
+                    <div>
+                      <h3 className="font-heading font-bold text-[13px] mb-1" style={{ color:"var(--e-text)" }}>{p.title}</h3>
+                      <p className="text-[11px] leading-[1.5] mb-2" style={{ color:"var(--e-muted)" }}>{p.desc}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-2 text-[10px]" style={{ color:"var(--e-muted2)" }}>
+                        <span>📍 {p.loc}</span><span>📅 {p.year}</span>
+                      </div>
+                      <span className="text-[10px] font-bold" style={{ color:"var(--e-blue)" }}>View →</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom row: 3 wide horizontal cards */}
+          <div className="grid lg:grid-cols-3 gap-3">
+            {projects.slice(3).map((p) => (
+              <div key={p.title} className="rounded-[12px] overflow-hidden flex"
+                   style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)", boxShadow:"0 2px 8px rgba(0,0,0,0.04)" }}>
+                <div className="w-[90px] flex-shrink-0 flex items-center justify-center text-[28px] relative"
+                     style={{ background: p.grad }}>
+                  <div className="absolute top-2 left-1.5"><span className="tag-gold" style={{ fontSize:"7px" }}>{p.tag}</span></div>
                   {p.emoji}
                 </div>
-                <div className="p-3.5">
-                  <h3 className="font-heading font-bold text-[13px] mb-1" style={{ color:"var(--e-text)" }}>{p.title}</h3>
-                  <p className="text-[11px] mb-2" style={{ color:"var(--e-muted)" }}>{p.desc}</p>
-                  <div className="flex gap-2.5 text-[10px]" style={{ color:"var(--e-muted2)" }}>
-                    <span>📍 {p.loc}</span><span>📅 {p.year}</span>
+                <div className="p-3.5 flex flex-col justify-between flex-1">
+                  <h3 className="font-heading font-bold text-[12px] mb-1" style={{ color:"var(--e-text)" }}>{p.title}</h3>
+                  <div className="flex items-center justify-between">
+                    <div className="text-[9px]" style={{ color:"var(--e-muted2)" }}>📍 {p.loc} · 📅 {p.year}</div>
+                    <span className="text-[9px] font-bold" style={{ color:"var(--e-blue)" }}>View →</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
           <div className="text-center mt-7">
             <Link href="/projects" className="inline-flex items-center gap-2 bg-[#1565C0] hover:bg-[#1E7FE8] text-white px-5 py-3 rounded-[8px] text-[13px] font-semibold transition-colors">
-              View All Projects <ArrowRight className="w-4 h-4" />
+              View All 500+ Projects <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* PRODUCTS */}
-      <section className="px-6 lg:px-10 py-14" style={{ background:"var(--e-section-alt)" }}>
+      {/* PRODUCTS — navy gradient same as dark mode */}
+      <section className="px-6 lg:px-10 py-14" style={{ background:"var(--e-section-navy)" }}>
         <div className="max-w-[1100px] mx-auto">
-          <div className="e-eyebrow mb-1.5">Products</div>
-          <h2 className="font-heading font-extrabold text-[28px] mb-2.5" style={{ color:"var(--e-text)" }}>Premium <span style={{ color:"var(--e-gold)" }}>Product Range</span></h2>
-          <p className="text-[14px] max-w-[480px] leading-[1.7] mb-8" style={{ color:"var(--e-muted)" }}>Curated lighting, smart controls, and security hardware with professional installation.</p>
+          <div className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.12em]" style={{ color:"rgba(99,153,255,0.7)" }}>Products</div>
+          <h2 className="font-heading font-extrabold text-[28px] mb-2.5 text-white">Premium <span style={{ color:"var(--e-gold)" }}>Product Range</span></h2>
+          <p className="text-[14px] max-w-[480px] leading-[1.7] mb-8" style={{ color:"rgba(255,255,255,0.5)" }}>Curated lighting, smart controls, and security hardware with professional installation.</p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {products.map((p) => (
               <div key={p.name} className="rounded-[14px] overflow-hidden"
-                   style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)" }}>
+                   style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)" }}>
                 <div className="h-[106px] flex items-center justify-center text-[40px]"
-                     style={{ background: p.bg, borderBottom:"1px solid var(--e-card-bdr)" }}>{p.emoji}</div>
+                     style={{ background: p.bg, borderBottom:"1px solid rgba(255,255,255,0.06)" }}>{p.emoji}</div>
                 <div className="p-3">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.05em] mb-1" style={{ color:"var(--e-blue-lt)" }}>{p.cat}</div>
-                  <div className="font-heading font-semibold text-[12px] mb-1.5" style={{ color:"var(--e-text)" }}>{p.name}</div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.05em] mb-1" style={{ color:"rgba(99,153,255,0.8)" }}>{p.cat}</div>
+                  <div className="font-heading font-semibold text-[12px] mb-1.5 text-white">{p.name}</div>
                   <div className="text-[13px] font-bold mb-2" style={{ color:"var(--e-gold)" }}>{p.price}</div>
                   <button className="w-full rounded-[5px] py-1.5 text-[11px] font-semibold transition-colors"
-                          style={{ background:"var(--e-blue-dim)", border:"1px solid var(--e-blue-bdr)", color:"var(--e-blue)" }}>
+                          style={{ background:"rgba(21,101,192,0.25)", border:"1px solid rgba(21,101,192,0.4)", color:"#93C5FD" }}>
                     Enquire
                   </button>
                 </div>
@@ -238,7 +297,9 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-7">
-            <Link href="/products" className="inline-flex items-center gap-2 bg-[#1565C0] hover:bg-[#1E7FE8] text-white px-5 py-3 rounded-[8px] text-[13px] font-semibold transition-colors">
+            <Link href="/products"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-[8px] text-[13px] font-bold hover:brightness-105 transition-all"
+              style={{ background:"var(--e-gold)", color:"#050A14" }}>
               Browse Full Catalogue <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
