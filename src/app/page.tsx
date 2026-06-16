@@ -136,21 +136,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* WHY US */}
-      <section className="px-6 lg:px-10 py-14" style={{ background:"var(--e-section-alt)" }}>
+      {/* WHY US — navy gradient in both modes */}
+      <section className="px-6 lg:px-10 py-14" style={{ background:"var(--e-section-navy)" }}>
         <div className="max-w-[1100px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="e-eyebrow mb-1.5">Why Eros</div>
-              <h2 className="font-heading font-extrabold text-[28px] mb-2.5" style={{ color:"var(--e-text)" }}>15 Years of <span style={{ color:"var(--e-gold)" }}>Trusted</span> Expertise</h2>
-              <p className="text-[14px] leading-[1.7] mb-6" style={{ color:"var(--e-muted)" }}>Built on quality, transparency, and long-term client relationships.</p>
+              <div className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.12em]" style={{ color:"var(--e-blue-lt)" }}>Why Eros</div>
+              <h2 className="font-heading font-extrabold text-[28px] mb-2.5 text-white">
+                15 Years of <span style={{ color:"var(--e-gold)" }}>Trusted</span> Expertise
+              </h2>
+              <p className="text-[14px] leading-[1.7] mb-6" style={{ color:"rgba(255,255,255,0.65)" }}>
+                Built on quality, transparency, and long-term client relationships.
+              </p>
               <div className="space-y-4">
                 {whyUs.map((w) => (
                   <div key={w.n} className="flex gap-3.5 items-start">
-                    <div className="w-9 h-9 bg-[#1565C0] rounded-[9px] flex items-center justify-center font-heading font-extrabold text-[13px] text-white flex-shrink-0">{w.n}</div>
+                    <div className="w-9 h-9 bg-[#1565C0] rounded-[9px] flex items-center justify-center font-heading font-extrabold text-[13px] text-white flex-shrink-0">
+                      {w.n}
+                    </div>
                     <div>
-                      <div className="font-semibold text-[14px] mb-0.5" style={{ color:"var(--e-text)" }}>{w.title}</div>
-                      <div className="text-[12px] leading-[1.6]" style={{ color:"var(--e-muted)" }}>{w.desc}</div>
+                      <div className="font-semibold text-[14px] mb-0.5 text-white">{w.title}</div>
+                      <div className="text-[12px] leading-[1.6]" style={{ color:"rgba(255,255,255,0.6)" }}>{w.desc}</div>
                     </div>
                   </div>
                 ))}
@@ -159,9 +165,11 @@ export default function HomePage() {
             <div className="grid grid-cols-2 gap-3">
               {metrics.map((m) => (
                 <div key={m.label} className="rounded-[14px] p-5 text-center"
-                     style={{ background:"var(--e-card-bg)", border:"1px solid var(--e-card-bdr)" }}>
-                  <div className="font-heading text-[34px] font-extrabold leading-none" style={{ color:"var(--e-gold)" }}>{m.num}</div>
-                  <div className="text-[11px] mt-1.5" style={{ color:"var(--e-muted)" }}>{m.label}</div>
+                     style={{ background:"rgba(255,255,255,0.07)", border:"1px solid rgba(255,255,255,0.12)" }}>
+                  <div className="font-heading text-[34px] font-extrabold leading-none" style={{ color:"var(--e-gold)" }}>
+                    {m.num}
+                  </div>
+                  <div className="text-[11px] mt-1.5" style={{ color:"rgba(255,255,255,0.6)" }}>{m.label}</div>
                 </div>
               ))}
             </div>
