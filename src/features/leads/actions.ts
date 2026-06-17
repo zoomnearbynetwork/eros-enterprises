@@ -7,6 +7,7 @@ import { leadCaptureServerSchema, type LeadCaptureInput } from "@/features/leads
 import type { LeadCaptureActionResponse } from "@/features/leads/types";
 import { actionFailure, actionSuccess } from "@/lib/action-response";
 import { getDatabaseErrorMessage, isRecoverableDatabaseError } from "@/lib/database";
+import { sendLeadAlert } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function createLeadAction(
@@ -34,6 +35,24 @@ export async function createLeadAction(
     const lead = await createLead(validated.data);
 
     revalidatePath("/dashboard/leads");
+
+    // Fire-and-forget: admin email alert (non-blocking)
+    sendLeadAlert({
+      leadNumber: lead.leadNumber,
+      name: validated.data.name,
+      phone: validated.data.phone,
+      email: validated.data.email,
+      serviceInterest: validated.data.serviceInterest,
+      location: validated.data.location,
+      budgetRange: validated.data.budgetRange,
+      message: validated.data.message,
+      sourcePage: validated.data.sourcePage,
+      utmSource: validated.data.utmSource,
+      utmMedium: validated.data.utmMedium,
+      utmCampaign: validated.data.utmCampaign,
+    }).catch((err) => {
+      console.error("[lead-alert] Email failed (non-fatal):", err);
+    });
 
     return actionSuccess("Thanks. Your enquiry has been received.", {
       id: lead.id,
