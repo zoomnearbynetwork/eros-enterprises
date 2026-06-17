@@ -9,6 +9,7 @@ import { actionFailure, actionSuccess } from "@/lib/action-response";
 import { getDatabaseErrorMessage, isRecoverableDatabaseError } from "@/lib/database";
 import { sendLeadAlert } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { notifyAdminNewLead } from "@/lib/whatsapp-notify";
 
 export async function createLeadAction(
   input: LeadCaptureInput,
@@ -36,7 +37,7 @@ export async function createLeadAction(
 
     revalidatePath("/dashboard/leads");
 
-    // Fire-and-forget: admin email alert (non-blocking)
+    // Fire-and-forget: admin email alert
     sendLeadAlert({
       leadNumber: lead.leadNumber,
       name: validated.data.name,
@@ -52,6 +53,18 @@ export async function createLeadAction(
       utmCampaign: validated.data.utmCampaign,
     }).catch((err) => {
       console.error("[lead-alert] Email failed (non-fatal):", err);
+    });
+
+    // Fire-and-forget: WhatsApp admin notification
+    notifyAdminNewLead({
+      leadNumber: lead.leadNumber,
+      name: validated.data.name,
+      phone: validated.data.phone,
+      serviceInterest: validated.data.serviceInterest,
+      sourcePage: validated.data.sourcePage,
+      budgetRange: validated.data.budgetRange,
+    }).catch((err) => {
+      console.error("[lead-wa] WhatsApp notification failed (non-fatal):", err);
     });
 
     return actionSuccess("Thanks. Your enquiry has been received.", {
