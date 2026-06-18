@@ -4,19 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     authInterrupts: true,
   },
-  serverExternalPackages: ["@react-pdf/renderer"],
-  distDir: process.env.NEXT_DIST_DIR ?? ".next",
-  output: "standalone",
-  outputFileTracingIncludes: {
-    "/*": [
-      "./node_modules/.prisma/client/**/*",
-      "./node_modules/@prisma/client/**/*",
-    ],
-    "/api/**/*": [
-      "./node_modules/.prisma/client/**/*",
-      "./node_modules/@prisma/client/**/*",
-    ],
-  },
+  serverExternalPackages: ["@react-pdf/renderer", "@prisma/client", ".prisma/client"],
+  // output: "standalone" removed — not compatible with Vercel deployment
+  // Vercel handles its own bundling; standalone is for Docker/self-hosted only
   poweredByHeader: false,
   reactStrictMode: true,
   compress: true,
