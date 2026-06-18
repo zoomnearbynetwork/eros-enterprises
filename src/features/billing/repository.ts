@@ -348,6 +348,7 @@ export async function getBillingOptions() {
 }
 
 export async function getQuotations(filters: BillingFilters = {}) {
+  return withDatabaseFallback("billing.getQuotations", [], async () => {
   const quotations = await prisma.quotation.findMany({
     where: buildQuotationWhere(filters),
     orderBy: [{ createdAt: "desc" }],
@@ -390,6 +391,7 @@ export async function getQuotations(filters: BillingFilters = {}) {
       ...mapped,
       invoice: quotation.invoice ? mapInvoiceLink(quotation.invoice) : null,
     };
+  });
   });
 }
 
@@ -526,6 +528,7 @@ export async function getConvertibleQuotations() {
 }
 
 export async function getInvoices(filters: BillingFilters = {}) {
+  return withDatabaseFallback("billing.getInvoices", [], async () => {
   const invoices = await prisma.invoice.findMany({
     where: buildInvoiceWhere(filters),
     orderBy: [{ createdAt: "desc" }],
@@ -568,6 +571,7 @@ export async function getInvoices(filters: BillingFilters = {}) {
       ...mapped,
       quotation: invoice.quotation ? mapQuotationLink(invoice.quotation) : null,
     };
+  });
   });
 }
 
