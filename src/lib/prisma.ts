@@ -1,5 +1,6 @@
 import "server-only";
 
+import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
@@ -13,26 +14,27 @@ if (!connectionString) {
   throw new Error("DATABASE_URL is required to initialize Prisma.");
 }
 
-// For @prisma/adapter-pg, SSL must be configured explicitly on the pg Pool
-// rather than relying on query string params, which the pg driver ignores.
-// This is required for Railway's public proxy URL from Vercel (external host).
-const isProduction = process.env.NODE_ENV === "production";
+// Create a pg.Pool directly so we can pass explicit SSL config.
+// @prisma/adapter-pg v7 accepts a Pool instance as the first argument.
+// Using ssl: { rejectUnauthorized: false } is required for Railway's
+// public proxy URL (interchange.proxy.rlwy.net) from Vercel.
+const pool = new pg.Pool({
+  connectionString,
+  ssl: process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false }
+    : undefined,
+  max: 1,                       // serverless: 1 connection per function
+  connectionTimeoutMillis: 30_000,
+  idleTimeoutMillis: 10_000,
+});
 
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    adapter: new PrismaPg({
-      connectionString,
-      // Force SSL in production — required for Railway public proxy from Vercel
-      ssl: isProduction ? { rejectUnauthorized: false } : undefined,
-      // Serverless-safe pool settings — one connection per function invocation
-      max: 1,
-      connectionTimeoutMillis: 30_000,
-      idleTimeoutMillis: 10_000,
-    }),
-    log: isProduction ? ["error"] : ["warn", "error"],
+    adapter: new PrismaPg(pool),
+    log: process.env.NODE_ENV === "production" ? ["error"] : ["warn", "error"],
   });
 
-if (!isProduction) {
+if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
